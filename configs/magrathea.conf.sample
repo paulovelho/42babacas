@@ -1,0 +1,13 @@
+[general]
+  use_environment = "default"
+  time_zone = "America/Sao_Paulo"
+ 
+[default]
+  db_host = ""
+  db_name = ""
+  db_user = ""
+  db_pass = ""
+  site_path = "/Users/Sites/mywebsite/app"
+  time_zone = "America/Sao_Paulo"
+  twitter_key = ""
+  twitter_secret = ""
