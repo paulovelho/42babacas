@@ -4,29 +4,22 @@ require("inc/global.php");
 include($magrathea_path."/MagratheaServer.php");
 
 MagratheaModel::IncludeAllModels();
+include("Controls/FarmController.php");
 include("Controls/TwitterController.php");
 
 //error_reporting(E_ALL ^ E_STRICT);
 
 class TwitterServer extends MagratheaServer{
 
-  private $twitter;
 
   public function Run() {
-    $this->Load()->post();
+    $this->FarmFollower();
   }
 
-  public function Load() {
-    $this->twitter = new TwitterController();
-    return $this;
+  public function FarmFollower() {
+    $farmController = new FarmController();
+    $farmController->Seed();
   }
-
-  public function Post() {
-    $now = now();
-    $tweet = $this->twitter->Post("now it's ".$now);
-    print_r($tweet);
-  }
-
 }
 
 $server = new TwitterServer();

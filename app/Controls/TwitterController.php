@@ -27,6 +27,19 @@ class TwitterController {
     $postData = $this->connection->post("statuses/update", ["status" => $tweet]);
     return new Tweet($postData);
   }
+
+  public function GetTrending() {
+    $brasil_id = "23424768";
+    return $this->connection->get("trends/place", ["id" => $brasil_id]);
+  }
+
+  public function Follow($user_id) {
+    return $this->connection->post("friendships/create", ["user_id" => $user_id]);
+  }
+
+  public function Unfollow($user_id) {
+    return $this->connection->post("friendships/destroy", ["user_id" => $user_id]);
+  }
 }
 
 ?>
