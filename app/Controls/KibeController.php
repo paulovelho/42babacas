@@ -8,6 +8,7 @@ class KibeController {
   // singleton:
   protected static $inst = null;
 
+  // Singleton instance:
   public static function Otariano(){
     if(!isset(self::$inst)){
       self::$inst = new KibeController();
@@ -19,7 +20,7 @@ class KibeController {
   }
 
   public function Kibar() {
-    $this->GetInspiration(array("harpias", "braunermegda", "oiluiz", "rodpocket"));
+    $this->GetInspiration(array("harpias", "braunermegda", "oiluiz", "rodpocket", "ulissesmattos"));
     $this->tweets = $this->RateTweets($this->tweets);
     p_r($this->tweets);
   }

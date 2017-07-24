@@ -32,6 +32,19 @@ class Status {
     $this->GetEntities($data->entities);
   }
 
+  /* 
+   * this is a fucking complex rate system...
+   * it was developed by @paulovelho in 2017-07-25,
+   *   during a particular boring workday
+   * the logic was taken out from my own ass
+   *   but basically:
+   *    - if it have an entity (image, url) or it's a reply, it gets zero rating.
+   *    - we have to measure the popularity. We measure it by [likes] and [retweets].
+   *    - we want a popular tweet to have higher rate.
+   *    - we want a EXTREMELY popular tweet to have a lower rate.
+   *    - hashtags should lower the rating (they are boring)
+   *    - foreign tweets higher the rating (they might seem more original)
+   */
   public function Rate() {
     if ( 
         $this->has_entities || 
@@ -40,6 +53,7 @@ class Status {
         $this->rate = 0;
         return 0;
     }
+
     $rate = 50;
     // rate with retweet:
     if ( $this->retweets > 1000 ) {
@@ -59,6 +73,9 @@ class Status {
       $rate = $rate + ($this->likes / 40);
     }
 
+    // hashtags should lower the rate as well (-20 points per hashtag):
+    $rate = $rate - (count($this->entities["hashtags"]) * 20);
+
     // higher rate for foreign tweet
     if ( !$this->in_portuguese ) {
       $rate = $rate + 50;
@@ -72,23 +89,21 @@ class Status {
 
   private function GetEntities($entities) {
     $this->entities = array();
+    $this->has_entities = false;
     if ( count($entities->hashtags) > 0 ) {
       $this->GetHashtags($entities->hashtags);
     }
     if ( count($entities->urls) > 0 ) {
       $this->GetUrls($entities->urls);
+      $this->has_entities = true;
     }
     if ( count($entities->user_mentions) > 0 ) {
       $this->GetMentions($entities->user_mentions);
+      $this->has_entities = true;
     }
     if ( count($entities->media) > 0 ) {
       $this->GetMedia($entities->media);
-    }
-
-    if( count($this->entities) > 0 ) {
       $this->has_entities = true;
-    } else {
-      $this->has_entities = false;
     }
   }
 
