@@ -1,6 +1,7 @@
 <?php
 
 require("lib/twitteroauth-0.7.2/autoload.php");
+include_once("Models/Status.obj.php");
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterController {
@@ -33,12 +34,44 @@ class TwitterController {
     return $this->connection->get("trends/place", ["id" => $brasil_id]);
   }
 
+  /* USERS */
+  public function GetUserInfo($arroba) {
+    return $this->connection->get("users/show", ["screen_name" => $arroba]);
+  }
+
+  public function GetUserId($arroba) {
+    $user = $this->GetUserInfo($arroba);
+    return $user->id;
+  }
+
+  /* GET TWEETS */
+  public function GetTweetsFrom($user, $count) {
+    $data = array('count' => $count);
+    if( is_int($user) ) {
+      $data["user_id"] = $user;
+    } else {
+      $data["screen_name"] = $user;
+    }
+    $tweets = $this->connection->get("statuses/user_timeline", $data);
+    return $this->ConvertIntoStatuses($tweets);
+  }
+
+  /* FOLLOWING */
   public function Follow($user_id) {
     return $this->connection->post("friendships/create", ["user_id" => $user_id]);
   }
 
   public function Unfollow($user_id) {
     return $this->connection->post("friendships/destroy", ["user_id" => $user_id]);
+  }
+
+  /* HELPERS */
+  private function ConvertIntoStatuses($status){
+    $tweets = array();
+    foreach ($status as $st) {
+      array_push($tweets, new Status($st));
+    }
+    return $tweets;
   }
 }
 

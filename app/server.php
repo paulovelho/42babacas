@@ -4,8 +4,7 @@ require("inc/global.php");
 include($magrathea_path."/MagratheaServer.php");
 
 MagratheaModel::IncludeAllModels();
-include("Controls/FarmController.php");
-include("Controls/TwitterController.php");
+MagratheaController::IncludeAllControllers();
 
 //error_reporting(E_ALL ^ E_STRICT);
 
@@ -13,12 +12,22 @@ class TwitterServer extends MagratheaServer{
 
 
   public function Run() {
-    $this->FarmFollower();
+    $this->Kibar();
   }
 
   public function FarmFollower() {
     $farmController = new FarmController();
     $farmController->Seed();
+  }
+
+  public function Kibar() {
+    KibeController::Otariano()->Kibar();
+  }
+
+  public function Test() {
+    $twitter = new TwitterController();
+    $info = $twitter->GetTweetsFrom("braunermegda", 20);
+    print_r($info);
   }
 }
 
