@@ -4,6 +4,7 @@ class KibeController {
 
   private $tweets = array();
   private $twitter;
+  private $log = "";
 
   // singleton:
   protected static $inst = null;
@@ -21,8 +22,43 @@ class KibeController {
 
   public function Kibar() {
     $this->GetInspiration(array("harpias", "braunermegda", "oiluiz", "rodpocket", "ulissesmattos"));
+//    $this->GetInspiration(array("harpias"));
     $this->tweets = $this->RateTweets($this->tweets);
-    p_r($this->tweets);
+    $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
+    if ($this->PickupTweetToPost()) {
+      $this->Log("transaction ended: successfully posted");
+    } else {
+      $this->Log("transaction ended: no more tweets available");
+    }
+  }
+
+  private function PickupTweetToPost() {
+    if (count($this->tweets) == 0) return false;
+    $key = 0;
+    $tweet = $this->tweets[$key];
+    if ( !$this->Post($tweet) ) {
+      array_splice($this->tweets, $key, 1);
+      return $this->PickupTweetToPost();
+    } else {
+      return true;
+    }
+  }
+
+  private function Post($status) {
+    $existing = TweetsControl::GetByTweetId($status->id);
+    if ($existing->id) {
+      return false;
+    }
+    $tweet = new Tweet();
+    $tweet->Build($status);
+    $postedStatus = $this->twitter->Post($status->text);
+    if ($postedStatus && $postedStatus->id) {
+      $this->Log("posted tweet {".$status->text."} with id ".$postedStatus->id);
+      return $tweet->Log($this->log)->Post($postedStatus->id);
+    } else {
+      $this->Log("failed posting tweet {".$status->text."}");
+      return false;
+    }
   }
 
   public function GetInspiration($thinkers) {
@@ -33,6 +69,12 @@ class KibeController {
 
   public function GetTweetsFrom($arroba) {
     return $this->twitter->GetTweetsFrom($arroba, 10);
+  }
+
+  public function Log($l) {
+    $l = "::- ".$l."\n";
+    echo $l;
+    $this->log .= $l;
   }
   
   /* RATE SYSTEM */
@@ -49,8 +91,6 @@ class KibeController {
   private function compareRates($a, $b) {
     return strcmp($b->rate, $a->rate);
   }
-
-
 
   /* DEPRECATED: our tweet entities already have this information... */
   public static function CheckForMentions($tweet) {

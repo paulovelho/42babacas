@@ -12,6 +12,7 @@ class Status {
   public $retweets;
   public $likes;
   public $in_portuguese;
+  public $translated;
   public $rate = 50;
   
   function __construct($data) {

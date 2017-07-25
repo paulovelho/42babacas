@@ -20,13 +20,26 @@ class TwitterController {
     $this->connection = new TwitterOAuth($consumer_key, $consumer_token, $access_token, $access_token_secret);
   }
 
+  public function CheckOk($status) {
+    if ($status->errors) {
+      $error = $status->errors[0];
+      echo "ERROR POSTING STATUS: {[".$error->code."]: ".$error->message."}\n";
+      return false;
+    }
+    return true;
+  }
+
   public function Credentials() {
     return $this->connection->get("account/verify_credentials");
   }
 
   public function Post($tweet) {
     $postData = $this->connection->post("statuses/update", ["status" => $tweet]);
-    return new Tweet($postData);
+    if ($this->CheckOk($postData)) {
+      return new Status($postData);
+    } else {
+      return false;
+    }
   }
 
   public function GetTrending() {
