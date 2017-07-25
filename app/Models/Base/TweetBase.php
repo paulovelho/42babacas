@@ -5,7 +5,7 @@
 
 class TweetBase extends MagratheaModel implements iMagratheaModel {
 
-	public $id, $tweet_id, $text, $stolen_from, $original_tweet;
+	public $id, $tweet_id, $text, $retweets, $likes, $rate, $original_id, $user_id, $user_name, $translate_from, $log;
 	public $created_at, $updated_at;
 	protected $autoload = null;
 
@@ -21,10 +21,16 @@ class TweetBase extends MagratheaModel implements iMagratheaModel {
 		$this->dbTable = "tweets";
 		$this->dbPk = "id";
 		$this->dbValues["id"] = "int";
-		$this->dbValues["tweet_id"] = "string";
+		$this->dbValues["tweet_id"] = "int";
 		$this->dbValues["text"] = "string";
-		$this->dbValues["stolen_from"] = "string";
-		$this->dbValues["original_tweet"] = "string";
+		$this->dbValues["retweets"] = "int";
+		$this->dbValues["likes"] = "int";
+		$this->dbValues["rate"] = "int";
+		$this->dbValues["original_id"] = "int";
+		$this->dbValues["user_id"] = "int";
+		$this->dbValues["user_name"] = "string";
+		$this->dbValues["translate_from"] = "string";
+		$this->dbValues["log"] = "text";
 
 
 		$this->dbAlias["created_at"] =  "datetime";

@@ -5,7 +5,7 @@
 
 class ThinkersBase extends MagratheaModel implements iMagratheaModel {
 
-	public $id, $twitter_id, $name, $ideas_stolen, $english;
+	public $id, $twitter_id, $name, $ideas_stolen, $english, $active;
 	public $created_at, $updated_at;
 	protected $autoload = null;
 
@@ -25,6 +25,7 @@ class ThinkersBase extends MagratheaModel implements iMagratheaModel {
 		$this->dbValues["name"] = "string";
 		$this->dbValues["ideas_stolen"] = "int";
 		$this->dbValues["english"] = "int";
+		$this->dbValues["active"] = "int";
 
 
 		$this->dbAlias["created_at"] =  "datetime";

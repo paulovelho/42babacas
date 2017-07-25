@@ -78,7 +78,7 @@ class Status {
 
     // higher rate for foreign tweet
     if ( !$this->in_portuguese ) {
-      $rate = $rate + 50;
+      $rate = $rate + 20;
     }
 
     if( $rate > 100 ) $rate = 100;
