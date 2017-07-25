@@ -5,8 +5,8 @@
   class MagratheaLoginController extends MagratheaController {
     public static function Login(){
       if(@$_GET["error"] == "login_error")
-        self::GetSmarty()->assign("message", "Login or password incorrect!");
-      self::GetSmarty()->display("login.html");
+        $error_message = "Login or password incorrect!";
+      include "Views/login.html";
     }
   }
 
