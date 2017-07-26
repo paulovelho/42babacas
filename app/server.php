@@ -12,7 +12,7 @@ class TwitterServer extends MagratheaServer{
 
 
   public function Run() {
-    $this->Kibar();
+    $this->Test();
   }
 
   public function FarmFollower() {
@@ -26,7 +26,7 @@ class TwitterServer extends MagratheaServer{
 
   public function Test() {
     $twitter = new TwitterController();
-    $info = $twitter->GetTweetsFrom("braunermegda", 20);
+    $info = $twitter->GetTweet(890060733031043072);
     print_r($info);
   }
 }

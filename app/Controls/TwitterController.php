@@ -1,7 +1,7 @@
 <?php
 
-require("lib/twitteroauth-0.7.2/autoload.php");
-include_once("Models/Status.obj.php");
+require(__DIR__."/../lib/twitteroauth-0.7.2/autoload.php");
+include_once(__DIR__."/../Models/Status.obj.php");
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterController {
@@ -67,6 +67,12 @@ class TwitterController {
     }
     $tweets = $this->connection->get("statuses/user_timeline", $data);
     return $this->ConvertIntoStatuses($tweets);
+  }
+
+  public function GetTweet($tweet_id) {
+    $tweet = $this->connection->get("statuses/show", ["id" => $tweet_id, "include_entities" => true]);
+    return $tweet;
+//    return $this->ConvertIntoStatuses($tweets);
   }
 
   /* FOLLOWING */
