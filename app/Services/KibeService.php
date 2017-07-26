@@ -5,7 +5,7 @@ class KibeService {
   private $tweets = array();
   private $twitter;
   private $simulate = false;
-  private $log = "";
+  private $log = array();
 
   // singleton:
   protected static $inst = null;
@@ -27,9 +27,11 @@ class KibeService {
   }
 
   public function Kibar() {
-    $this->GetInspiration(array("harpias", "braunermegda", "oiluiz", "rodpocket", "ulissesmattos"));
-//    $this->GetInspiration(array("harpias"));
+    $this->GetInspiration(array("oiluiz", "rodpocket", "ulissesmattos"));
     $this->tweets = $this->RateTweets($this->tweets);
+    if($this->simulate) {
+      p_r($this->tweets);
+    }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
@@ -90,9 +92,8 @@ class KibeService {
   }
 
   public function Log($l) {
-    $l = "::- ".$l."\n";
-    echo $l;
-    $this->log .= $l;
+    array_push($this->log, $l);
+    LoggerService::Instance()->Log($l);
   }
   
   /* RATE SYSTEM */

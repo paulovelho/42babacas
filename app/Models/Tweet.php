@@ -14,7 +14,11 @@ class Tweet extends TweetBase {
   }
 
   public function Log($log) {
-    $this->log = $log;
+    if(is_array($log)) {
+      $this->log = implode("; ", $log);
+    } else {
+      $this->log = $log;
+    }
     return $this;
   }
 

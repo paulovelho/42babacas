@@ -5,6 +5,7 @@ include($magrathea_path."/MagratheaServer.php");
 
 include("Services/FarmService.php");
 include("Services/KibeService.php");
+include("Services/LoggerService.php");
 include("Services/TwitterService.php");
 
 MagratheaModel::IncludeAllModels();
