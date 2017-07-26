@@ -8,6 +8,16 @@ class TwitterService {
   
   private $connection;
 
+  // singleton:
+  protected static $inst = null;
+
+  // Singleton instance:
+  public static function Instance(){
+    if(!isset(self::$inst)){
+      self::$inst = new TwitterService();
+    }
+    return self::$inst;
+  }
   function __construct() {
     $this->Connect();
   }

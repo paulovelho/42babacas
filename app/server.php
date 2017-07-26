@@ -28,8 +28,7 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
-    $twitter = new TwitterService();
-    $info = $twitter->GetTweet(889170601038028800);
+    $info = TwitterService::Instance()->GetTweet(889170601038028800);
     print_r($info);
   }
 }

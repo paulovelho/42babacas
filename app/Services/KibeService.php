@@ -18,7 +18,7 @@ class KibeService {
     return self::$inst;
   }
   private function __construct(){
-    $this->twitter = new TwitterService();
+    $this->twitter = TwitterService::Instance();
   }
 
   public function Simulate() {
