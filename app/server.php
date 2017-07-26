@@ -23,6 +23,9 @@ class TwitterServer extends MagratheaServer{
 
   public function ValidateAuth(){
     $key = $this->GetAuth();
+    if ($key == "simulate") {
+      $this->SimulateKibe();
+    }
     $secret = MagratheaConfig::Instance()->GetFromDefault("access_key");
     if($key != $secret) {
       $this->Json(array("success" => false, "error" => 403, "message" => "Authorization failed."));
@@ -45,6 +48,10 @@ class TwitterServer extends MagratheaServer{
     KibeService::Otariano()->Kibar();
   }
 
+  public function SimulateKibe() {
+    KibeService::Otariano()->Simulate()->Kibar();
+  }
+
   public function Test() {
     $info = TwitterService::Instance()->GetTweet(889170601038028800);
     print_r($info);
@@ -54,7 +61,6 @@ class TwitterServer extends MagratheaServer{
 $server = new TwitterServer();
 $server->Run();
 // $server->Start();
-
 
 // cron job:
 //
