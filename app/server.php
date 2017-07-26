@@ -25,6 +25,7 @@ class TwitterServer extends MagratheaServer{
     $key = $this->GetAuth();
     if ($key == "simulate") {
       $this->SimulateKibe();
+      die("---\n---\nSIMULATION ENDED");
     }
     $secret = MagratheaConfig::Instance()->GetFromDefault("access_key");
     if($key != $secret) {
