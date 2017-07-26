@@ -30,7 +30,7 @@ class KibeService {
     $this->GetInspiration(array("oiluiz", "rodpocket", "ulissesmattos"));
     $this->tweets = $this->RateTweets($this->tweets);
     if($this->simulate) {
-      p_r($this->tweets);
+      print_r($this->tweets);
     }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
     if ($this->PickupTweetToPost()) {
