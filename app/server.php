@@ -15,7 +15,7 @@ class TwitterServer extends MagratheaServer{
 
 
   public function Run() {
-    $this->Test();
+    $this->Kibar();
   }
 
   public function FarmFollower() {
@@ -24,12 +24,12 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Kibar() {
-    KibeService::Otariano()->Kibar();
+    KibeService::Otariano()->Simulate()->Kibar();
   }
 
   public function Test() {
     $twitter = new TwitterService();
-    $info = $twitter->GetTweet(890060733031043072);
+    $info = $twitter->GetTweet(889170601038028800);
     print_r($info);
   }
 }

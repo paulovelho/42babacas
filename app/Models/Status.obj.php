@@ -6,6 +6,7 @@ class Status {
   public $text;
   public $user;
   public $arroba;
+  public $author_followers;
   public $reply_to;
   public $entities;
   public $has_entities;
@@ -26,6 +27,7 @@ class Status {
     $this->text = $data->text;
     $this->user = $data->user->id;
     $this->arroba = $data->user->screen_name;
+    $this->author_followers = $data->user->followers_count;
     $this->reply_to = $data->in_reply_to_status_id;
     $this->retweets = $data->retweet_count;
     $this->likes = $data->favorite_count;
@@ -81,6 +83,9 @@ class Status {
     if ( !$this->in_portuguese ) {
       $rate = $rate + 20;
     }
+
+    // lower rate for popular authors
+    $rate = $rate - ($this->author_followers / 5000);
 
     if( $rate > 100 ) $rate = 100;
     if( $rate < 0 ) $rate = 0;

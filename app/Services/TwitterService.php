@@ -71,8 +71,7 @@ class TwitterService {
 
   public function GetTweet($tweet_id) {
     $tweet = $this->connection->get("statuses/show", ["id" => $tweet_id, "include_entities" => true]);
-    return $tweet;
-//    return $this->ConvertIntoStatuses($tweets);
+    return new Status($tweet);
   }
 
   /* FOLLOWING */

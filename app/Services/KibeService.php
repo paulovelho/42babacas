@@ -4,6 +4,7 @@ class KibeService {
 
   private $tweets = array();
   private $twitter;
+  private $simulate = false;
   private $log = "";
 
   // singleton:
@@ -20,6 +21,11 @@ class KibeService {
     $this->twitter = new TwitterService();
   }
 
+  public function Simulate() {
+    $this->simulate = true;
+    return $this;
+  }
+
   public function Kibar() {
     $this->GetInspiration(array("harpias", "braunermegda", "oiluiz", "rodpocket", "ulissesmattos"));
 //    $this->GetInspiration(array("harpias"));
@@ -27,8 +33,10 @@ class KibeService {
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
+      return true;
     } else {
       $this->Log("transaction ended: no more tweets available");
+      return false;
     }
   }
 
@@ -36,27 +44,37 @@ class KibeService {
     if (count($this->tweets) == 0) return false;
     $key = 0;
     $tweet = $this->tweets[$key];
-    if ( !$this->Post($tweet) ) {
+    if ( $this->WasAlreadyPosted($tweet) ) {
       array_splice($this->tweets, $key, 1);
       return $this->PickupTweetToPost();
     } else {
-      return true;
+      return $this->Post($tweet);
     }
   }
 
-  private function Post($status) {
+  // we check in our database if we already posted this status
+  private function WasAlreadyPosted($status) {
     $existing = TweetsControl::GetByTweetId($status->id);
     if ($existing->id) {
-      return false;
+      $this->Log("tweet with text {".$status->text."} already exists with id {".$existing->id."}");
+      return true;
     }
+    return false;
+  }
+
+  private function Post($status) {
     $tweet = new Tweet();
     $tweet->Build($status);
-    $postedStatus = $this->twitter->Post($status->text);
+    if( $this->simulate ) {
+      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."}");
+      return true;
+    }
+    $postedStatus = $this->twitter->Post($tweet->text);
     if ($postedStatus && $postedStatus->id) {
-      $this->Log("posted tweet {".$status->text."} with id ".$postedStatus->id);
+      $this->Log("posted tweet {".$tweet->text."} with id ".$postedStatus->id);
       return $tweet->Log($this->log)->Post($postedStatus->id);
     } else {
-      $this->Log("failed posting tweet {".$status->text."}");
+      $this->Log("failed posting tweet {".$tweet->text."}");
       return false;
     }
   }
