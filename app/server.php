@@ -3,8 +3,11 @@
 require("inc/global.php");
 include($magrathea_path."/MagratheaServer.php");
 
+include("Services/FarmService.php");
+include("Services/KibeService.php");
+include("Services/TwitterService.php");
+
 MagratheaModel::IncludeAllModels();
-MagratheaController::IncludeAllControllers();
 
 //error_reporting(E_ALL ^ E_STRICT);
 
@@ -16,16 +19,16 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function FarmFollower() {
-    $farmController = new FarmController();
+    $farmController = new FarmService();
     $farmController->Seed();
   }
 
   public function Kibar() {
-    KibeController::Otariano()->Kibar();
+    KibeService::Otariano()->Kibar();
   }
 
   public function Test() {
-    $twitter = new TwitterController();
+    $twitter = new TwitterService();
     $info = $twitter->GetTweet(890060733031043072);
     print_r($info);
   }
