@@ -14,8 +14,25 @@ MagratheaModel::IncludeAllModels();
 
 class TwitterServer extends MagratheaServer{
 
+  public function GetAuth() {
+    if( $_SERVER["argc"] > 1 ) {
+      return $_SERVER["argv"][1];
+    }
+    return $_REQUEST["auth"];
+  }
+
+  public function ValidateAuth(){
+    $key = $this->GetAuth();
+    $secret = MagratheaConfig::Instance()->GetFromDefault("access_key");
+    if($key != $secret) {
+      $this->Json(array("success" => false, "error" => 403, "message" => "Authorization failed."));
+      LoggerService::Instance()->Log("Authorization failed.");
+      die;
+    } else return true;
+  }
 
   public function Run() {
+    $this->validateAuth();
     $this->Kibar();
   }
 
