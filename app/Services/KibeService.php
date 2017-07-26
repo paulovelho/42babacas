@@ -81,15 +81,18 @@ class KibeService {
     }
   }
 
+  /* GETTING TWEETS */
   public function GetInspiration($thinkers) {
     foreach ($thinkers as $arroba) {
       $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba));
     }
   }
-
   public function GetTweetsFrom($arroba) {
-    return $this->twitter->GetTweetsFrom($arroba, 10);
+    return $this->twitter->GetTweetsFrom($arroba, 3);
   }
+  public function GetRandomTweetFrom($arroba, $seed) {
+  }
+
 
   public function Log($l) {
     array_push($this->log, $l);

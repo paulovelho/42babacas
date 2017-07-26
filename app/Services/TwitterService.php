@@ -78,10 +78,19 @@ class TwitterService {
     $tweets = $this->connection->get("statuses/user_timeline", $data);
     return $this->ConvertIntoStatuses($tweets);
   }
-
   public function GetTweet($tweet_id) {
     $tweet = $this->connection->get("statuses/show", ["id" => $tweet_id, "include_entities" => true]);
     return new Status($tweet);
+  }
+
+  /* SEARCH TWEETS */
+  public function SearchFrom($arroba, $query, $count) {
+    $full_query = "from:@".$arroba." ".$query;
+    return $this->Search($full_query, $count);
+  }
+  public function Search($query, $count) {
+    $tweets = $this->connection->get("search/tweets", ["q" => $query, "count" => 5]);
+    return $this->ConvertIntoStatuses($tweets->statuses);
   }
 
   /* FOLLOWING */
