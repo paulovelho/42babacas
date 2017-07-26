@@ -4,14 +4,13 @@
   MagratheaController::IncludeAllControllers();
   MagratheaModel::IncludeAllModels();
  
- 
   // let's include some of Magrathea's awesome plugins:
   // include("plugins/bootstrap/load.php");
- 
+
   try {
     MagratheaView::Instance()
-    ->IncludeCSS("css/style.css")
-    ->IncludeJavascript("javascript/script.js");
+      ->IncludeCSS("css/style.css")
+      ->IncludeJavascript("javascript/script.js");
   } catch(Exception $ex){
     // probably the file does not exists. What to do now?
   }
@@ -24,7 +23,6 @@
     MagratheaController::Load($control, $action, $params);
   } catch (Exception $ex) {
     Debug($ex);
-    BaseControl::Go404();
   }
- 
+
 ?>
