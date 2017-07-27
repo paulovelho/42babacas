@@ -108,7 +108,7 @@ class KibeService {
     $this->Log("HISTORICAL TWEETS: got ".count($historical_tweets)." tweets".
         " from [".$dead_thinker."]".
         " with maximum rate of ".$historical_tweets[0]->rate.
-        " and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate;
+        " and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate);
     $delay = rand(60, 3600); // post between 60 and 3600 seconds
     $this->Post($historical_tweets[0], $delay);
   }
