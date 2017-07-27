@@ -7,8 +7,14 @@ class KibeService {
   private $simulate = false;
   private $log = array();
 
-  private $dead_thinkers = ["_pavan_", "bomdiaporque", "microcontoscos", "bomsenhor", "joaoluisjr"];
-
+  private $dead_thinkers = [
+    "_pavan_", "bomdiaporque", 
+    "microcontoscos", "bomsenhor", 
+    "joaoluisjr", "paulovelho", "brunafeia"];
+  private $alive_thinkers = [
+    "rodpocket", "braunermegda", "oiluiz", "harpias", 
+    "ulissesmattos", "alechandracomix", "bomsenhor", 
+    "paulovelho", "bethmoreno", "masteeu", "brunafeia", "oraporra"]; 
   // singleton:
   protected static $inst = null;
 
@@ -29,7 +35,9 @@ class KibeService {
   }
 
   public function Kibar() {
-    $this->GetInspiration(array("oiluiz", "rodpocket", "ulissesmattos", "bomsenhor"));
+    shuffle($this->alive_thinkers);
+    $inspiration = array_slice($this->alive_thinkers, 0, 3);
+    $this->GetInspiration($inspiration);
     $this->tweets = $this->RateTweets($this->tweets);
     if($this->simulate) {
       print_r($this->tweets);
@@ -89,6 +97,7 @@ class KibeService {
   /* GETTING TWEETS */
   public function GetInspiration($thinkers) {
     foreach ($thinkers as $arroba) {
+      $this->Log("looking for inspiration on ".$arroba."'s twitter...");
       $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba));
     }
   }
