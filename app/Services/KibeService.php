@@ -39,6 +39,10 @@ class KibeService {
     $inspiration = array_slice($this->alive_thinkers, 0, 3);
     $this->GetInspiration($inspiration);
     $this->tweets = $this->RateTweets($this->tweets);
+    if( count($this->tweets) == 0 ) {
+      $this->Log("no good tweets found... closing...");
+      return false;
+    }
     if($this->simulate) {
       print_r($this->tweets);
     }
