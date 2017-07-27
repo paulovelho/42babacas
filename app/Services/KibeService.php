@@ -71,7 +71,7 @@ class KibeService {
     $tweet = new Tweet();
     $tweet->Build($status);
     if( $this->simulate ) {
-      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."} ".
+      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."}, originally posted on {".$status->TweetDate()."} ".
         ($delay > 0 ? "with delay of ".$delay : ""));
       return true;
     }
@@ -105,7 +105,10 @@ class KibeService {
     if($this->simulate) {
       print_r($historical_tweets);
     }
-    $this->Log("HISTORICAL TWEETS: got ".count($historical_tweets)." tweets from [".$dead_thinker."] with maximum rate of ".$historical_tweets[0]->rate." and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate)." - top tweet is from {".$historical_tweets[0]->TweetDate()."}";
+    $this->Log("HISTORICAL TWEETS: got ".count($historical_tweets)." tweets".
+        " from [".$dead_thinker."]".
+        " with maximum rate of ".$historical_tweets[0]->rate.
+        " and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate;
     $delay = rand(60, 3600); // post between 60 and 3600 seconds
     $this->Post($historical_tweets[0], $delay);
   }
