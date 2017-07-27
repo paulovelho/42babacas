@@ -15,15 +15,18 @@ class Status {
   public $in_portuguese;
   public $translated;
   public $rate = 50;
+
+  public $log = "";
   
   function __construct($data) {
+    if(empty($data)) return $this;
     $this->fillUp($data);
     $this->IsRetweet($data->retweeted_status);
   }
 
   private function fillUp($data) {
     $this->id = $data->id;
-    $this->createdAt = $data->created_at;
+    $this->createdAt = strtotime($data->created_at);
     $this->text = $data->text;
     $this->user = $data->user->id;
     $this->arroba = $data->user->screen_name;
@@ -53,11 +56,19 @@ class Status {
         $this->has_entities || 
         !empty($this->reply_to) 
       ) {
-        $this->rate = 0;
-        return 0;
+      $this->rate = 0;
+      return 0;
     }
 
     $rate = 50;
+    $rate = $this->EntitiesRate($rate);
+    $rate = $this->LikabilityRate($rate);
+    $rate = $this->AuthorRate($rate);
+    $rate = $this->TimeRate($rate);
+    $this->rate = $this->NormalizeRate($rate);
+    return $this->rate;
+  }
+  public function LikabilityRate($rate) {
     // rate with retweet:
     if ( $this->retweets > 1000 ) {
       $rate = $rate - ($this->retweets / 200);
@@ -75,22 +86,46 @@ class Status {
     } else {
       $rate = $rate + ($this->likes / 40);
     }
-
+    return $rate;
+  }
+  public function AuthorRate($rate) {
+    // lower rate for popular authors
+    $author_rate = ($this->author_followers / 5000);
+    if ($author_rate > 90) $author_rate = 90;
+    return $rate - $author_rate;
+  }
+  public function NormalizeRate($rate) {
+    if( $rate > 100 ) $rate = 100;
+    if( $rate < 0 ) $rate = 0;
+    return $rate;
+  }
+  public function EntitiesRate($rate) {
     // hashtags should lower the rate as well (-20 points per hashtag):
     $rate = $rate - (count($this->entities["hashtags"]) * 20);
-
     // higher rate for foreign tweet
     if ( !$this->in_portuguese ) {
       $rate = $rate + 20;
     }
-
-    // lower rate for popular authors
-    $rate = $rate - ($this->author_followers / 5000);
-
-    if( $rate > 100 ) $rate = 100;
-    if( $rate < 0 ) $rate = 0;
-    $this->rate = $rate;
     return $rate;
+  }
+  public function TimeRate($rate) {
+    // older the tweet, higher the rate
+    $now = time();
+    $timeDifference = $now - $this->createdAt;
+    $six_months = 15770000;
+    // don't change for the last 6 months
+    if ($timeDifference < $six_months) return $rate;
+
+    // if have hashtags, it doesn't get time rates
+    if (count($this->entities["hashtags"]) > 0) return $rate; 
+
+    $time_rate = ($timeDifference - $six_months) / 1000000;
+    if($time_rate > 75) $time_rate = 75;
+    return $rate + $time_rate;
+  }
+
+  public function TweetDate() {
+    return date("Y-m-d h:i:s", $this->createdAt);
   }
 
   private function GetEntities($entities) {
@@ -152,6 +187,10 @@ class Status {
     } else {
       return false;
     }
+  }
+
+  private function Log($log) {
+    $this->log += "{".$log."}\n";
   }
 
 

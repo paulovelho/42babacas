@@ -7,6 +7,8 @@ class KibeService {
   private $simulate = false;
   private $log = array();
 
+  private $dead_thinkers = ["_pavan_", "bomdiaporque", "microcontoscos", "bomsenhor", "joaoluisjr"];
+
   // singleton:
   protected static $inst = null;
 
@@ -27,12 +29,13 @@ class KibeService {
   }
 
   public function Kibar() {
-    $this->GetInspiration(array("oiluiz", "rodpocket", "ulissesmattos"));
+    $this->GetInspiration(array("oiluiz", "rodpocket", "ulissesmattos", "bomsenhor"));
     $this->tweets = $this->RateTweets($this->tweets);
     if($this->simulate) {
       print_r($this->tweets);
     }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
+    $this->HistoricalKibe();
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
       return true;
@@ -64,14 +67,16 @@ class KibeService {
     return false;
   }
 
-  private function Post($status) {
+  private function Post($status, $delay=0) {
     $tweet = new Tweet();
     $tweet->Build($status);
     if( $this->simulate ) {
-      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."}");
+      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."} ".
+        ($delay > 0 ? "with delay of ".$delay : ""));
       return true;
     }
-    $postedStatus = $this->twitter->Post($tweet->text);
+    sleep($delay);
+    $postedStatus = $this->twitter->PostTweet($tweet->text);
     if ($postedStatus && $postedStatus->id) {
       $this->Log("posted tweet {".$tweet->text."} with id ".$postedStatus->id);
       return $tweet->Log($this->log)->Post($postedStatus->id);
@@ -90,15 +95,47 @@ class KibeService {
   public function GetTweetsFrom($arroba) {
     return $this->twitter->GetTweetsFrom($arroba, 3);
   }
-  public function GetRandomTweetFrom($arroba, $seed) {
+
+  /* HISTORY */
+  public function HistoricalKibe() {
+    $top_word = $this->GetPopularWord();
+    $this->Log("Getting Historical Kibe - TOP WORD: [".$top_word."]");
+    $dead_thinker = $this->dead_thinkers[array_rand($this->dead_thinkers, 1)];
+    $historical_tweets = $this->GetHistoryFrom($dead_thinker, $top_word);
+    if($this->simulate) {
+      print_r($historical_tweets);
+    }
+    $this->Log("HISTORICAL TWEETS: got ".count($historical_tweets)." tweets from [".$dead_thinker."] with maximum rate of ".$historical_tweets[0]->rate." and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate)." - top tweet is from {".$historical_tweets[0]->TweetDate()."}";
+    $delay = rand(60, 3600); // post between 60 and 3600 seconds
+    $this->Post($historical_tweets[0], $delay);
+  }
+  public function GetPopularWord() {
+    $words = $this->GenerateWordCloud();
+    return key($words);
+  }
+  public function GetHistoryFrom($arroba, $query) {
+    $tweets = $this->twitter->BrowserSearchFrom($arroba, $query, 5);
+    return $this->RateTweets($tweets);
   }
 
-
-  public function Log($l) {
-    array_push($this->log, $l);
-    LoggerService::Instance()->Log($l);
+  public function GenerateWordCloud() {
+    $cloud = array();
+    $all_status = "";
+    foreach ($this->tweets as $st) {
+      $all_status .= " ".$st->text;
+    }
+    preg_match_all('(\w{4,})u', $all_status, $match_arr);
+    $word_arr = $match_arr[0];
+    foreach ($word_arr as $word) {
+      $word = htmlentities(strtolower($word));
+      if (empty($word)) continue;
+      if ( empty($cloud[$word]) ) $cloud[$word] = 0;
+      $cloud[$word] ++;
+    }
+    arsort($cloud);
+    return $cloud;
   }
-  
+
   /* RATE SYSTEM */
   public function RateTweets($tweets) {
     $filteredTw = array();
@@ -112,6 +149,14 @@ class KibeService {
   }
   private function compareRates($a, $b) {
     return strcmp($b->rate, $a->rate);
+  }
+  private function compareWords($a, $b) {
+    return strcmp($b["count"], $a["count"]); 
+  }
+
+  public function Log($l) {
+    array_push($this->log, $l);
+    LoggerService::Instance()->Log($l);
   }
 
   /* DEPRECATED: our tweet entities already have this information... */

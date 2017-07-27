@@ -2,6 +2,7 @@
 
 require(__DIR__."/../lib/twitteroauth-0.7.2/autoload.php");
 include_once(__DIR__."/../Models/Status.obj.php");
+include(__DIR__."/BrowserTwitterService.php");
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterService {
@@ -43,7 +44,7 @@ class TwitterService {
     return $this->connection->get("account/verify_credentials");
   }
 
-  public function Post($tweet) {
+  public function PostTweet($tweet) {
     $postData = $this->connection->post("statuses/update", ["status" => $tweet]);
     if ($this->CheckOk($postData)) {
       return new Status($postData);
@@ -84,11 +85,11 @@ class TwitterService {
   }
 
   /* SEARCH TWEETS */
-  public function SearchFrom($arroba, $query, $count) {
+  public function GetSearchFrom($arroba, $query, $count) {
     $full_query = "from:@".$arroba." ".$query;
     return $this->Search($full_query, $count);
   }
-  public function Search($query, $count) {
+  public function GetSearch($query, $count) {
     $tweets = $this->connection->get("search/tweets", ["q" => $query, "count" => 5]);
     return $this->ConvertIntoStatuses($tweets->statuses);
   }
@@ -100,6 +101,20 @@ class TwitterService {
 
   public function Unfollow($user_id) {
     return $this->connection->post("friendships/destroy", ["user_id" => $user_id]);
+  }
+
+  /* BROWSER FUNCTIONS */
+  public function Browser() {
+    return BrowserTwitterService::Instance();
+  }
+  public function BrowserSearchFrom($arroba, $query, $count) {
+    $raw_result = $this->Browser()->SearchFrom($arroba, $query);
+    $best_result = $this->Browser()->FilterHistory($raw_result, $count);
+    $tweets = array();
+    foreach ($best_result as $result) {
+      array_push($tweets, $this->GetTweet($result->id));
+    }
+    return $tweets;
   }
 
   /* HELPERS */

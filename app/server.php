@@ -43,12 +43,12 @@ class TwitterServer extends MagratheaServer{
     $this->Kibar();
   }
 
-  public function FarmFollower() {
+  private function FarmFollower() {
     $farmController = new FarmService();
     $farmController->Seed();
   }
 
-  public function Kibar() {
+  private function Kibar() {
     KibeService::Otariano()->Kibar();
   }
 
@@ -57,8 +57,9 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
-    $info = TwitterService::Instance()->GetTweet(889170601038028800);
-    print_r($info);
+
+//    $info = KibeService::Otariano()->Simulate()->GetHistoryFrom("bomdiaporque", "amor");
+//    print_r($info);
   }
 }
 
