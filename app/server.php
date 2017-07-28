@@ -14,7 +14,7 @@ MagratheaModel::IncludeAllModels();
 
 class TwitterServer extends MagratheaServer{
 
-  private $terminal = (PHP_SAPI === 'cli');
+  private $terminal;
 
   public function GetAuth() {
     if( $_SERVER["argc"] > 1 ) {
@@ -38,6 +38,7 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Run() {
+    $this->terminal = (PHP_SAPI === 'cli');
     if (!$this->terminal) echo "<pre>";
     $this->validateAuth();
     $this->Kibar();

@@ -112,6 +112,7 @@ class TwitterService {
     $best_result = $this->Browser()->FilterHistory($raw_result, $count);
     $tweets = array();
     foreach ($best_result as $result) {
+      if (empty($result->id)) continue;
       array_push($tweets, $this->GetTweet($result->id));
     }
     return $tweets;

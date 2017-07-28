@@ -80,6 +80,10 @@ class KibeService {
   }
 
   private function Post($status, $delay=0) {
+    if ( empty($status->id) ) {
+      $this->Log("ERROR: Trying to post an empty tweet...");
+      return false;
+    }
     $tweet = new Tweet();
     $tweet->Build($status);
     if( $this->simulate ) {

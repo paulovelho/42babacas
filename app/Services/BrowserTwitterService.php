@@ -61,7 +61,6 @@ class BrowserTwitterService {
       $tweet_text = $tweet->find(".tweet-text")[0];
       $text = html_entity_decode($tweet_text->plaintext);
 
-
       $status = @new Status();
       $status->id = $original_id;
       $status->text = $text;
