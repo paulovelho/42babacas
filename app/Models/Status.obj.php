@@ -76,7 +76,11 @@ class Status {
       if ( $this->retweets > 500 ) {
         $rate = $rate + ($this->retweets / 70);
       } else {
-        $rate = $rate + ($this->retweets / 20);
+        if ( $this->retweets < 5 ) {
+          $rate = $rate - 30;
+        } else {
+          $rate = $rate + ($this->retweets / 20);
+        }
       }
     }
 

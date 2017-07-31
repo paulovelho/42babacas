@@ -60,7 +60,6 @@
 								<th>ID</th>
 								<th>Name</th>
 								<th>Kibes</th>
-								<th>english?</th>
 								<th>Active</th>
 								<th>&nbsp;</th>
 							</tr>
@@ -70,14 +69,14 @@
 								foreach ($thinkers as $t) {
 									?>
 									<tr>
-										<td><?=$t["id"]?></td>
-										<td><?=$t["name"]?></td>
-										<td><?=$t["brewery"]?></td>
-										<td><?=$t["english"]?></td>
+										<td><?=$t->id?></td>
+										<td><?=$t->name?></td>
+										<td><?=$t->ideas_stolen?></td>
 										<td>
-											<i class="<?=(($t['active'] == true) ? "i-active" : "i-inactive")?>">&#25CF;</i>
+											<i class="<?=(($t->active) ? "i-active" : "i-inactive")?>">&diams;</i>
 										</td>
 										<td>
+											<a href="#" onclick="showEditBox(<?=$t->id?>)">Edit</a>
 										</td>
 									</tr>
 									<?php
@@ -94,8 +93,7 @@
 
 <script type="text/javascript">
 function showEditBox(id){
-	var page = "thinkers_edit.php";
-	ColorBox(page, { data: { "kibe_id": id } });
+	MagratheaPost("thinkers_edit.php", { "thinker_id": id });
 }
 
 </script>

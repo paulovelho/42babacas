@@ -12,7 +12,10 @@
 
   if(!empty($_SESSION["magrathea_user"])) {
     $admin = new MagratheaAdmin(); // adds the admin file
-    $admin->Load(); // load!
+    $admin
+      ->IncludeCSS("style.css")
+      ->AddPlugin("colorbox")
+      ->Load(); // load!
   } else {
     MagratheaLoginController::Login();
   }
