@@ -47,7 +47,7 @@ class KibeService {
       print_r($this->tweets);
     }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
-    $this->HistoricalKibe();
+//    $this->HistoricalKibe();
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
       return true;
