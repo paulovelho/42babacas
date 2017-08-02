@@ -71,7 +71,7 @@ class TwitterServer extends MagratheaServer{
 }
 
 $server = new TwitterServer();
-$server->Test();
+$server->Run();
 // $server->Start();
 
 // cron job:
