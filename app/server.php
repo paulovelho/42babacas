@@ -58,13 +58,20 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
+    $th = new Thinkers();
+    $th->name = "paulovelho";
+    $th->twitter_id = "31196133";
+    $th->ideas_stolen = 0;
+    $th->active = true;
+    $th->Save();
+    print_r($th);
 //    $info = KibeService::Otariano()->Simulate()->GetHistoryFrom("bomdiaporque", "amor");
 //    print_r($info);
   }
 }
 
 $server = new TwitterServer();
-$server->Run();
+$server->Test();
 // $server->Start();
 
 // cron job:
