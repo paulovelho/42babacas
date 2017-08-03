@@ -170,7 +170,7 @@ class KibeService {
   public function RateTweets($tweets) {
     $filteredTw = array();
     foreach ($tweets as $tw) {
-      if( $tw->Rate() > 0 ) {
+      if( $tw->Rate($this->historical) > 0 ) {
         array_push($filteredTw, $tw);
       }
     }

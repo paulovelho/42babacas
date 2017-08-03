@@ -51,7 +51,7 @@ class Status {
    *    - hashtags should lower the rating (they are boring)
    *    - foreign tweets higher the rating (they might seem more original)
    */
-  public function Rate() {
+  public function Rate($time_rate=true) {
     $this->Log("rating [".$this->text."] from @".$this->arroba." {entities: ".$this->has_entities.", reply_to: ".$this->reply_to."} ");
     if ( 
         $this->has_entities || 
@@ -65,7 +65,9 @@ class Status {
     $rate = $this->EntitiesRate($rate);
     $rate = $this->LikabilityRate($rate);
     $rate = $this->AuthorRate($rate);
-    $rate = $this->TimeRate($rate);
+    if ($time_rate) {
+      $rate = $this->TimeRate($rate);
+    }
     $this->rate = $this->NormalizeRate($rate);
     $this->Log("final rate: ".$this->rate);
     return $this->rate;
@@ -137,7 +139,7 @@ class Status {
     $now = time();
     $timeDifference = $now - $this->createdAt;
     $six_months = 15770000;
-    $log .= "time difference: ".$timeDifference;
+    $log .= "time difference: ".$timeDifference.", (".floor($timeDifference/86400)." days ago); ";
     // don't change for the last 6 months
     if ($timeDifference < $six_months) return $rate;
 
