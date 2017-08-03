@@ -3,8 +3,6 @@
 include(__DIR__."/Base/CycleBase.php");
 
 class Cycle extends CycleBase {
-  public $robot = "";
-  
   public function SetAction($act) {
     $this->action = $act;
     return $this;
@@ -12,9 +10,9 @@ class Cycle extends CycleBase {
 
   public function Add($log) {
     if(is_array($log)) {
-      $this->log = implode("; ", $log);
+      $this->robot = implode("; ", $log);
     } else {
-      $this->log = $log;
+      $this->robot = $log;
     }
     return $this;
   }
