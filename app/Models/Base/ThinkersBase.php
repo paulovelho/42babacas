@@ -40,5 +40,4 @@ class ThinkersControlBase extends MagratheaModelControl {
 	protected static $modelName = "Thinkers";
 	protected static $dbTable = "thinkers";
 }
-
 ?>
