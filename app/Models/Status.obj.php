@@ -73,7 +73,7 @@ class Status {
     return $this->rate;
   }
   public function LikabilityRate($rate) {
-    $log = "\n--- authors rate: ";
+    $log = "\n--- likability rate: ";
     // rate with retweet:
     if ( $this->retweets > 1000 ) {
       $rate = $rate - ($this->retweets / 200);
