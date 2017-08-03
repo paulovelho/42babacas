@@ -52,6 +52,7 @@ class Status {
    *    - foreign tweets higher the rating (they might seem more original)
    */
   public function Rate() {
+    $this->Log("rating [".$this->text."] from @".$this->arroba." {entities: ".$this->has_entities.", reply_to: ".$this->reply_to."} ");
     if ( 
         $this->has_entities || 
         !empty($this->reply_to) 
@@ -66,9 +67,11 @@ class Status {
     $rate = $this->AuthorRate($rate);
     $rate = $this->TimeRate($rate);
     $this->rate = $this->NormalizeRate($rate);
+    $this->Log("final rate: ".$this->rate);
     return $this->rate;
   }
   public function LikabilityRate($rate) {
+    $log = "\n--- authors rate: ";
     // rate with retweet:
     if ( $this->retweets > 1000 ) {
       $rate = $rate - ($this->retweets / 200);
@@ -83,6 +86,7 @@ class Status {
         }
       }
     }
+    $log .= "retweets: ".$this->retweets.", rating ".$rate."; ";
 
     // rate with like:
     if ( $this->likes > 1000 ) {
@@ -90,33 +94,50 @@ class Status {
     } else {
       $rate = $rate + ($this->likes / 40);
     }
+    $log .= "likes: ".$this->likes.", rating ".$rate."; ";
+    $log .= "[rate: ".$rate.";]";
+    $this->Log($log);
     return $rate;
   }
   public function AuthorRate($rate) {
+    $log = "\n--- authors rate: ";
+    $log .= "followers: ".$this->author_followers."; ";
     // lower rate for popular authors
     $author_rate = ($this->author_followers / 5000);
     if ($author_rate > 90) $author_rate = 90;
-    return $rate - $author_rate;
+    $rate = $rate - $author_rate;
+    $log .= "[rate: ".$rate.";]";
+    $this->Log($log);
+    return $rate;
   }
   public function NormalizeRate($rate) {
     if( $rate > 100 ) $rate = 100;
     if( $rate < 0 ) $rate = 0;
+    $log .= "[rate: ".$rate.";]";
+    $this->Log($log);
     return $rate;
   }
   public function EntitiesRate($rate) {
+    $log = "\n--- entities rate: ";
     // hashtags should lower the rate as well (-20 points per hashtag):
     $rate = $rate - (count($this->entities["hashtags"]) * 20);
+    $log .= "hashtags: ".count($this->entities["hashtags"])."; ";
     // higher rate for foreign tweet
     if ( !$this->in_portuguese ) {
       $rate = $rate + 20;
     }
+    $log .= "foreign language: ".!$this->in_portuguese."; ";
+    $log .= "[rate: ".$rate.";]";
+    $this->Log($log);
     return $rate;
   }
   public function TimeRate($rate) {
+    $log = "\n--- time rate: ";
     // older the tweet, higher the rate
     $now = time();
     $timeDifference = $now - $this->createdAt;
     $six_months = 15770000;
+    $log .= "time difference: ".$timeDifference;
     // don't change for the last 6 months
     if ($timeDifference < $six_months) return $rate;
 
@@ -125,7 +146,10 @@ class Status {
 
     $time_rate = ($timeDifference - $six_months) / 1000000;
     if($time_rate > 75) $time_rate = 75;
-    return $rate + $time_rate;
+    $rate += $time_rate;
+    $log .= "[rate: ".$rate.";]";
+    $this->Log($log);
+    return $rate;
   }
 
   public function TweetDate() {
@@ -193,8 +217,9 @@ class Status {
     }
   }
 
-  private function Log($log) {
-    $this->log += "{".$log."}\n";
+  private function Log($log, $newLine = false) {
+    $this->log .= "{".$log."}";
+    if ($newLine) $this->log .= "\n";
   }
 
 

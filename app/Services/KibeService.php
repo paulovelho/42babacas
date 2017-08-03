@@ -5,6 +5,7 @@ class KibeService {
   private $tweets = array();
   private $twitter;
   private $simulate = false;
+  private $historical = false;
   private $log = array();
 
   private $dead_thinkers = [
@@ -35,6 +36,7 @@ class KibeService {
   }
 
   public function Kibar() {
+    $this->historical = false;
     shuffle($this->alive_thinkers);
     $inspiration = array_slice($this->alive_thinkers, 0, 3);
     $this->GetInspiration($inspiration);
@@ -47,7 +49,6 @@ class KibeService {
       print_r($this->tweets);
     }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
-//    $this->HistoricalKibe();
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
       return true;
@@ -95,7 +96,7 @@ class KibeService {
     $postedStatus = $this->twitter->PostTweet($tweet->text);
     if ($postedStatus && $postedStatus->id) {
       $this->Log("posted tweet {".$tweet->text."} with id ".$postedStatus->id);
-      return $tweet->Log($this->log)->Post($postedStatus->id);
+      return $tweet->Log($status->log)->Post($postedStatus->id);
     } else {
       $this->Log("failed posting tweet {".$tweet->text."}");
       return false;
@@ -105,7 +106,7 @@ class KibeService {
   /* GETTING TWEETS */
   public function GetInspiration($thinkers) {
     foreach ($thinkers as $arroba) {
-      $this->Log("looking for inspiration on ".$arroba."'s twitter...");
+      $this->Log("looking for inspiration on @".$arroba."'s twitter...");
       $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba));
     }
   }
@@ -114,11 +115,20 @@ class KibeService {
   }
 
   /* HISTORY */
-  public function HistoricalKibe() {
-    $top_word = $this->GetPopularWord();
-    $this->Log("Getting Historical Kibe - TOP WORD: [".$top_word."]");
+  public function HistoricalKibe($word_seed=null) {
+    if (empty($word_seed)) {
+      $word_seed = $this->GetPopularWord();
+      $this->Log("Getting Historical Kibe - TOP WORD: [".$word_seed."]");
+    } else {
+      $this->Log("Getting Historical Kibe - WORD SEED: [".$word_seed."]");
+    }
+    if (empty($word_seed)) {
+      $this->Log("empty seed; ending process.... ");      
+      return false;
+    }
+    $this->historical = true;
     $dead_thinker = $this->dead_thinkers[array_rand($this->dead_thinkers, 1)];
-    $historical_tweets = $this->GetHistoryFrom($dead_thinker, $top_word);
+    $historical_tweets = $this->GetHistoryFrom($dead_thinker, $word_seed);
     if($this->simulate) {
       print_r($historical_tweets);
     }
@@ -127,7 +137,7 @@ class KibeService {
         " with maximum rate of ".$historical_tweets[0]->rate.
         " and minimum of ".$historical_tweets[count($historical_tweets)-1]->rate);
     $delay = rand(60, 3600); // post between 60 and 3600 seconds
-    $this->Post($historical_tweets[0], $delay);
+    return $this->Post($historical_tweets[0], $delay);
   }
   public function GetPopularWord() {
     $words = $this->GenerateWordCloud();
@@ -174,9 +184,23 @@ class KibeService {
     return strcmp($b["count"], $a["count"]); 
   }
 
+  /* LOG */
   public function Log($l) {
     array_push($this->log, $l);
     LoggerService::Instance()->Log($l);
+    return $this;
+  }
+  public function SaveLog() {
+    $c = new Cycle();
+    $c->SetAction($this->historical ? "historical" : "post")
+      ->Add($this->log)
+      ->Save();
+  }
+  public function ClearLog() {
+    LoggerService::Instance()->Log("\n--*--\n");
+    unset($this->log);
+    $this->log = array();
+    return $this;
   }
 
   /* DEPRECATED: our tweet entities already have this information... */

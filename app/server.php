@@ -42,6 +42,9 @@ class TwitterServer extends MagratheaServer{
     if (!$this->terminal) echo "<pre>";
     $this->validateAuth();
     $this->Kibar();
+    if ($this->ChanceOf(25)) {
+      $this->HistoricalKibe();
+    }
   }
 
   private function FarmFollower() {
@@ -52,9 +55,16 @@ class TwitterServer extends MagratheaServer{
   private function Kibar() {
     KibeService::Otariano()->Kibar();
   }
+  private function HistoricalKibe() {
+    KibeService::Otariano()->Simulate()->Kibar(); 
+  }
 
   public function SimulateKibe() {
     KibeService::Otariano()->Simulate()->Kibar();
+  }
+
+  public function ChanceOf($chance) {
+    return (rand(1,100) <= $chance);
   }
 
   public function Test() {
