@@ -41,8 +41,8 @@ class TwitterServer extends MagratheaServer{
     $this->terminal = (PHP_SAPI === 'cli');
     if (!$this->terminal) echo "<pre>";
     $this->validateAuth();
-    $this->Kibar();
-    if ($this->ChanceOf(25)) {
+    $posted = $this->Kibar();
+    if ($this->ChanceOf($posted ? 25 : 75)) {
       $this->HistoricalKibe();
     }
   }
@@ -54,9 +54,12 @@ class TwitterServer extends MagratheaServer{
 
   private function Kibar() {
     KibeService::Otariano()->Kibar();
+    KibeService::Otariano()->SaveLog();
   }
   private function HistoricalKibe() {
+    KibeService::Otariano()->ClearLog();
     KibeService::Otariano()->Simulate()->Kibar(); 
+    KibeService::Otariano()->SaveLog();
   }
 
   public function SimulateKibe() {

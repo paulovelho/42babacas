@@ -190,17 +190,17 @@ class KibeService {
     LoggerService::Instance()->Log($l);
     return $this;
   }
-  public function SaveLog() {
-    $c = new Cycle();
-    $c->SetAction($this->historical ? "historical" : "post")
-      ->Add($this->log)
-      ->Save();
-  }
   public function ClearLog() {
     LoggerService::Instance()->Log("\n--*--\n");
     unset($this->log);
     $this->log = array();
     return $this;
+  }
+  public function SaveLog() {
+    $c = new Cycle();
+    $c->SetAction($this->historical ? "historical" : "post")
+      ->Add($this->log)
+      ->Save();
   }
 
   /* DEPRECATED: our tweet entities already have this information... */
