@@ -22,8 +22,23 @@ class ThinkersControl extends ThinkersControlBase {
   public static function GetThinkerFromId ($user_id) {
     $query = MagratheaQuery::Select()
       ->Obj( new Thinkers() )
-      ->Where( array('twitter_id' => $id) );
+      ->Where( array('twitter_id' => $user_id) );
     return self::RunRow($query->SQL());
+  }
+
+  public static function GetRandomThinkers ($quantity) {
+    $query = MagratheaQuery::Select("name")
+      ->Table("thinkers")
+      ->Order("RAND ()")
+      ->Limit(5);
+    $arr = MagratheaDatabase::Instance()
+      ->QueryAll($query->SQL());
+    $thinkers = [];
+    foreach ($arr as $arroba) {
+      array_push($thinkers, $arroba["name"]);
+    }
+    return $thinkers;
+
   }
 }
 

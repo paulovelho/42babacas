@@ -12,10 +12,6 @@ class KibeService {
     "_pavan_", "bomdiaporque", 
     "microcontoscos", "bomsenhor", 
     "joaoluisjr", "paulovelho", "brunafeia"];
-  private $alive_thinkers = [
-    "rodpocket", "braunermegda", "oiluiz", "harpias", 
-    "ulissesmattos", "alechandracomix", "bomsenhor", 
-    "paulovelho", "bethmoreno", "masteeu", "brunafeia", "oraporra"]; 
   // singleton:
   protected static $inst = null;
 
@@ -37,8 +33,7 @@ class KibeService {
 
   public function Kibar() {
     $this->historical = false;
-    shuffle($this->alive_thinkers);
-    $inspiration = array_slice($this->alive_thinkers, 0, 3);
+    $inspiration = ThinkersControl::GetRandomThinkers(3);
     $this->GetInspiration($inspiration);
     $this->tweets = $this->RateTweets($this->tweets);
     if( count($this->tweets) == 0 ) {
