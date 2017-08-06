@@ -30,7 +30,7 @@ class ThinkersControl extends ThinkersControlBase {
     $query = MagratheaQuery::Select("name")
       ->Table("thinkers")
       ->Order("RAND ()")
-      ->Limit(5);
+      ->Limit($quantity);
     $arr = MagratheaDatabase::Instance()
       ->QueryAll($query->SQL());
     $thinkers = [];
