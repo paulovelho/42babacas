@@ -21,13 +21,13 @@ class TweetBase extends MagratheaModel implements iMagratheaModel {
 		$this->dbTable = "tweets";
 		$this->dbPk = "id";
 		$this->dbValues["id"] = "int";
-		$this->dbValues["tweet_id"] = "int";
+		$this->dbValues["tweet_id"] = "string";
 		$this->dbValues["text"] = "string";
 		$this->dbValues["retweets"] = "int";
 		$this->dbValues["likes"] = "int";
 		$this->dbValues["rate"] = "int";
-		$this->dbValues["original_id"] = "int";
-		$this->dbValues["user_id"] = "int";
+		$this->dbValues["original_id"] = "string";
+		$this->dbValues["user_id"] = "string";
 		$this->dbValues["user_name"] = "string";
 		$this->dbValues["translate_from"] = "string";
 		$this->dbValues["log"] = "text";
