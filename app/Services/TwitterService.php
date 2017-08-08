@@ -89,7 +89,7 @@ class TwitterService {
     $full_query = "from:@".$arroba." ".$query;
     return $this->Search($full_query, $count);
   }
-  public function GetSearch($query, $count) {
+  public function GetSearch($query, $count=5) {
     $tweets = $this->connection->get("search/tweets", ["q" => $query, "count" => 5]);
     return $this->ConvertIntoStatuses($tweets->statuses);
   }

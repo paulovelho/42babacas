@@ -7,7 +7,13 @@ class FollowFarm extends FollowFarmBase {
 }
 
 class FollowFarmControl extends FollowFarmControlBase {
-	// and here!
+  public static function UserExists($id) {
+    $query = MagratheaQuery::Select()
+      ->Obj( new FollowFarm() )
+      ->Where( array('user_id' => $id) );
+    $follow = self::RunRow($query->SQL());
+    return !empty($follow->id);
+  }
 }
 
 ?>

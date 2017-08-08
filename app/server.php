@@ -6,6 +6,7 @@ include($magrathea_path."/MagratheaServer.php");
 include("Services/FarmService.php");
 include("Services/KibeService.php");
 include("Services/LoggerService.php");
+include("Services/RateService.php");
 include("Services/TwitterService.php");
 
 MagratheaModel::IncludeAllModels();
@@ -41,15 +42,26 @@ class TwitterServer extends MagratheaServer{
     $this->terminal = (PHP_SAPI === 'cli');
     if (!$this->terminal) echo "<pre>";
     $this->validateAuth();
-    $posted = $this->Kibar();
-    if ($this->ChanceOf($posted ? 25 : 75)) {
-      $this->HistoricalKibe();
+    $this->RunSomething();
+  }
+
+  private function RunSomething() {
+    if ($this->ChanceOf( 100 )) {
+      $this->FarmFollower();
+    } else {
+      $this->PostATweet();
     }
   }
 
   private function FarmFollower() {
-    $farmController = new FarmService();
-    $farmController->Seed();
+    FarmService::Farm()->FollowSomeone();
+  }
+
+  private function PostATweet() {
+    $posted = $this->Kibar();
+    if ($this->ChanceOf($posted ? 25 : 75)) {
+      $this->HistoricalKibe();
+    }
   }
 
   private function Kibar() {
@@ -71,13 +83,12 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
-    $thinkers = ThinkersControl::GetRandomThinkers(5);
-    print_r($thinkers);
+    FarmService::Farm()->FollowSomeone();
   }
 }
 
 $server = new TwitterServer();
-$server->Run();
+$server->Test();
 // $server->Start();
 
 // cron job:

@@ -27,6 +27,7 @@ class ThinkersControl extends ThinkersControlBase {
   }
 
   public static function GetRandomThinkers ($quantity) {
+    return ["paulovelho"]; # for testing on environments without MySQL
     $query = MagratheaQuery::Select("name")
       ->Table("thinkers")
       ->Order("RAND ()")

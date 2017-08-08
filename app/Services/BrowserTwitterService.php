@@ -43,6 +43,7 @@ class BrowserTwitterService {
   }
 
   public function CrawlSearchPage($url) {
+    LoggerService::Instance()->Log("crawling [".$url."]");
     $html = file_get_contents($url);
     $dom = str_get_html($html);
     $tweets = array();
@@ -53,11 +54,8 @@ class BrowserTwitterService {
       // is it a reply?
       $reply = (count($tweet->find(".ReplyingToContextBelowAuthor")) > 0);
       if($reply) continue;
-      {
-        $this->foo = $foo;
-      }
-
       $user_data = $tweet->find(".js-profile-popup-actionable")[0];
+      if( empty($user_data) ) continue;
       $tweet_text = $tweet->find(".tweet-text")[0];
       $text = html_entity_decode($tweet_text->plaintext);
 
