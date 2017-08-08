@@ -74,14 +74,17 @@ class TwitterServer extends MagratheaServer{
       case 'farm':
         $this->FarmFollower();
         break;
+      case 'none':
+        echo "no action! that was easy!";
+        break;
       default:
-        echo "action invalid;"
+        echo "action invalid";
         break;
     }
   }
 
   private function FarmFollower() {
-    FarmService::Farm()->FollowSomeone();
+    return FarmService::Farm()->FollowSomeone();
   }
 
   private function PostATweet() {
