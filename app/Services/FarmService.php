@@ -55,7 +55,12 @@ class FarmService {
     if (!$user->user_id) {
       $this->Log("no one to unfollow...");
     }
-    print_r($user);
+    $twResponse = $this->twitter->Unfollow($user->user_id);
+    print_r($twResponse);
+    if (empty($twResponse)) return false;
+    $this->Log("unfollowed ".$twResponse->screen_name);
+    $user->unfollowed_on = now();
+    return $user->Save();
   }
 
   public function Follow($user_id) {
