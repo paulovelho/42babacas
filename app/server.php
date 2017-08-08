@@ -46,7 +46,7 @@ class TwitterServer extends MagratheaServer{
   }
 
   private function RunSomething() {
-    if ($this->ChanceOf( 100 )) {
+    if ($this->ChanceOf( 40 )) {
       $this->FarmFollower();
     } else {
       $this->PostATweet();
@@ -88,7 +88,7 @@ class TwitterServer extends MagratheaServer{
 }
 
 $server = new TwitterServer();
-$server->Test();
+$server->Run();
 // $server->Start();
 
 // cron job:
