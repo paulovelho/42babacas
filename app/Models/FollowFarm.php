@@ -14,6 +14,15 @@ class FollowFarmControl extends FollowFarmControlBase {
     $follow = self::RunRow($query->SQL());
     return !empty($follow->id);
   }
+
+  public static function GetToUnfollow() {
+    $query = MagratheaQuery::Select()
+      ->Obj( new FollowFarm() )
+      ->Where( array('unfollowed_on' => null) )
+      ->Limit(1)
+      ->Order("followed_on");
+    return self::RunRow($query->SQL());
+  }
 }
 
 ?>

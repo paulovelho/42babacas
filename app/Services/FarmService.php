@@ -49,6 +49,15 @@ class FarmService {
     return $this->Follow($tonto->user);
   }
 
+  public function UnfollowSomeone() {
+    $this-Log("Unfollowing someone...");
+    $user = FollowFarmControl::GetToUnfollow();
+    if (!$user->user_id) {
+      $this->Log("no one to unfollow...");
+    }
+    print_r($user);
+  }
+
   public function Follow($user_id) {
     $this->Log("following ".$user_id);
     if( FollowFarmControl::UserExists($user_id) ){
