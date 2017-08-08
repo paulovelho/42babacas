@@ -24,6 +24,12 @@ class TwitterServer extends MagratheaServer{
     return $_REQUEST["auth"];
   }
 
+  public function GetAction() {
+    if( $_SERVER["argc"] > 2 ) {
+      return $_SERVER["argv"][2];
+    } else return false;
+  }
+
   public function ValidateAuth(){
     $key = $this->GetAuth();
     if ($key == "simulate") {
@@ -42,7 +48,12 @@ class TwitterServer extends MagratheaServer{
     $this->terminal = (PHP_SAPI === 'cli');
     if (!$this->terminal) echo "<pre>";
     $this->validateAuth();
-    $this->RunSomething();
+    $action = $this->GetAction();
+    if ($action) {
+      $this->RunAction($action);
+    } else {
+      $this->RunSomething();
+    }
   }
 
   private function RunSomething() {
@@ -50,6 +61,22 @@ class TwitterServer extends MagratheaServer{
       $this->FarmFollower();
     } else {
       $this->PostATweet();
+    }
+  }
+  private function RunAction($action) {
+    switch ($action) {
+      case 'kibe':
+        $this->Kibar();
+        break;
+      case 'history':
+        $this->HistoricalKibe();
+        break;
+      case 'farm':
+        $this->FarmFollower();
+        break;
+      default:
+        echo "action invalid;"
+        break;
     }
   }
 
@@ -82,9 +109,6 @@ class TwitterServer extends MagratheaServer{
     return (rand(1,100) <= $chance);
   }
 
-  public function Test() {
-    FarmService::Farm()->FollowSomeone();
-  }
 }
 
 $server = new TwitterServer();
