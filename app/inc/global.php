@@ -14,5 +14,8 @@
   // debugging settings:
   // options: dev; debug; log; none;
   MagratheaDebugger::Instance()->SetType(MagratheaDebugger::LOG)->LogQueries(false);
- 
+
+  $timezone = MagratheaConfig::Instance()->GetFromDefault("time_zone");
+  date_default_timezone_set($timezone);
+
 ?>

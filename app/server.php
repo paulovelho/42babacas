@@ -80,6 +80,8 @@ class TwitterServer extends MagratheaServer{
       case 'none':
         echo "no action! that was easy!";
         break;
+      case 'test':
+        $this->Test();
       default:
         echo "action invalid";
         break;
@@ -112,6 +114,10 @@ class TwitterServer extends MagratheaServer{
 
   public function SimulateKibe() {
     KibeService::Otariano()->Simulate()->Kibar();
+  }
+
+  public function Test() {
+    LoggerService::Instance()->Log("test");
   }
 
   public function ChanceOf($chance) {
