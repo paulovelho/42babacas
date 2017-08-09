@@ -3,16 +3,18 @@
 include(__DIR__."/Base/CycleBase.php");
 
 class Cycle extends CycleBase {
+
   public function SetAction($act) {
     $this->action = $act;
+    $this->robot = "";
     return $this;
   }
 
   public function Add($log) {
     if(is_array($log)) {
-      $this->robot = implode("; ", $log);
+      $this->robot .= implode("; ", $log);
     } else {
-      $this->robot = $log;
+      $this->robot .= $log;
     }
     return $this;
   }
