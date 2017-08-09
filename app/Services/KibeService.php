@@ -31,6 +31,10 @@ class KibeService {
     return $this;
   }
 
+  public function GetTweets() {
+    return $this->tweets;
+  }
+
   public function Kibar() {
     $this->historical = false;
     $inspiration = ThinkersControl::GetRandomThinkers(3);
@@ -49,7 +53,7 @@ class KibeService {
       return true;
     } else {
       $this->Log("transaction ended: no more tweets available");
-      return false;
+      $this->HistoricalKibe();
     }
   }
 

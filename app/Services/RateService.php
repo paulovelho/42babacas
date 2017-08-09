@@ -62,7 +62,8 @@ class RateService {
   public function IsRateable() {
     if ( 
         $this->status->has_entities || 
-        !empty($this->status->reply_to) 
+        !empty($this->status->reply_to) ||
+        !$this->status->in_portuguese 
       ) {
       $this->rate = 0;
       return false;
@@ -120,11 +121,7 @@ class RateService {
     // hashtags should lower the rate as well (-20 points per hashtag):
     $rate = $rate - (count($this->status->entities["hashtags"]) * 20);
     $log .= "hashtags: ".count($this->status->entities["hashtags"])."; ";
-    // higher rate for foreign tweet
-    if ( !$this->status->in_portuguese ) {
-      $rate = $rate + 20;
-    }
-    $log .= "foreign language: ".!$this->status->in_portuguese."; ";
+
     $log .= "[rate: ".$rate.";]";
     $this->Log($log);
     $this->rate = $rate;

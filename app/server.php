@@ -3,6 +3,7 @@
 require("inc/global.php");
 include($magrathea_path."/MagratheaServer.php");
 
+include("Services/ActionService.php");
 include("Services/FarmService.php");
 include("Services/KibeService.php");
 include("Services/LoggerService.php");
@@ -57,12 +58,10 @@ class TwitterServer extends MagratheaServer{
   }
 
   private function RunSomething() {
-    if ($this->ChanceOf( 40 )) {
-      $this->FarmFollower();
-    } else {
-      $this->PostATweet();
-    }
+    $action = ActionService::Instance()->Action();
+    $this->RunAction($action);
   }
+
   private function RunAction($action) {
     switch ($action) {
       case 'kibe':
@@ -107,6 +106,10 @@ class TwitterServer extends MagratheaServer{
     KibeService::Otariano()->SaveLog();
   }
   private function HistoricalKibe() {
+    $tweets = KibeService::Otariano()->GetTweets();
+    if ( count($tweets) == 0 ) {
+      $this->Kibar();
+    }
     KibeService::Otariano()->ClearLog();
     KibeService::Otariano()->HistoricalKibe(); 
     KibeService::Otariano()->SaveLog();
@@ -118,10 +121,6 @@ class TwitterServer extends MagratheaServer{
 
   public function Test() {
     LoggerService::Instance()->Log("test");
-  }
-
-  public function ChanceOf($chance) {
-    return (rand(1,100) <= $chance);
   }
 
 }
