@@ -117,6 +117,7 @@ class TwitterServer extends MagratheaServer{
 
   public function SimulateKibe() {
     KibeService::Otariano()->Simulate()->Kibar();
+    KibeService::Otariano()->Simulate()->HistoricalKibe(); 
   }
 
   public function Test() {

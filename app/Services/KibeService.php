@@ -106,7 +106,7 @@ class KibeService {
   public function GetInspiration($thinkers) {
     foreach ($thinkers as $arroba) {
       $this->Log("looking for inspiration on @".$arroba."'s twitter...");
-      $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba));
+      $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba, 10));
     }
   }
   public function GetTweetsFrom($arroba) {
@@ -140,6 +140,7 @@ class KibeService {
   }
   public function GetPopularWord() {
     $words = $this->GenerateWordCloud();
+    $words = $this->LimitWords($words);
     return key($words);
   }
   public function GetHistoryFrom($arroba, $query) {
@@ -153,7 +154,7 @@ class KibeService {
     foreach ($this->tweets as $st) {
       $all_status .= " ".$st->text;
     }
-    preg_match_all('(\w{4,})u', $all_status, $match_arr);
+    preg_match_all('(\w{5,})u', $all_status, $match_arr);
     $word_arr = $match_arr[0];
     foreach ($word_arr as $word) {
       $word = htmlentities(strtolower($word));
@@ -162,6 +163,14 @@ class KibeService {
       $cloud[$word] ++;
     }
     arsort($cloud);
+    return $cloud;
+  }
+  public function LimitWords($cloud) {
+    foreach ($cloud as $key => $value) {
+      if ($value < 3) {
+        unset($cloud[$key]);
+      }
+    }
     return $cloud;
   }
 

@@ -69,7 +69,7 @@ class TwitterService {
   }
 
   /* GET TWEETS */
-  public function GetTweetsFrom($user, $count) {
+  public function GetTweetsFrom($user, $count=2) {
     $data = array('count' => $count);
     if( is_int($user) ) {
       $data["user_id"] = $user;
