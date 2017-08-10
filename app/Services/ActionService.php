@@ -28,7 +28,7 @@ class ActionService {
     if ($this->hour < 13) {
       return $this->Morning();
     }
-
+    return $this->Day();
   }
 
   public function NobleTime() {
