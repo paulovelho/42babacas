@@ -81,8 +81,9 @@ class TwitterServer extends MagratheaServer{
         break;
       case 'test':
         $this->Test();
+        break;
       default:
-        echo "action invalid";
+        echo "action invalid: {".$action."}";
         break;
     }
   }
