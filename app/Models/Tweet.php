@@ -37,6 +37,14 @@ class TweetsControl extends TweetControlBase {
       ->Where( array('tweet_id' => $id) );
     return self::RunRow($query->SQL());
   }
+
+  public static function GetLast($quantity) {
+    $query = MagratheaQuery::Select()
+      ->Obj( new Tweet() )
+      ->Order("id DESC")
+      ->Limit($quantity);
+    return self::Run($query);
+  }
 }
 
 ?>

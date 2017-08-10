@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tweets</title>
+
+
+<!-- CSS -->
+{$View->CSSs()}
+
+
+</head>
+<body>
+
+{foreach $tweets as $t}
+<div class="tweet" tweetID="{$t->tweet_id}"></div>
+{/foreach}
+
+</body>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script type="text/javascript">
+function loadTweet(element) {
+	var id = element.getAttribute("tweetID");
+
+	twttr.widgets.createTweet(
+		id, element, 
+		{
+			conversation : 'none'    // or all
+		})
+	.then (function (el) {
+	});
+}
+
+
+window.onload = (function(){
+
+	var tweets = document.getElementsByClassName("tweet");
+	for (var i = tweets.length - 1; i >= 0; i--) {
+		loadTweet(tweets[i]);
+	}
+});
+</script>
+
+</html>
