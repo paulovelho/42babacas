@@ -37,6 +37,14 @@ class TweetsControl extends TweetControlBase {
       ->Where( array('tweet_id' => $id) );
     return self::RunRow($query->SQL());
   }
+
+  public static function GetByOriginalId($id) {
+    $query = MagratheaQuery::Select()
+      ->Obj( new Tweet() )
+      ->Where( array('original_id' => $id) );
+    return self::RunRow($query->SQL());
+  }
+
 }
 
 ?>

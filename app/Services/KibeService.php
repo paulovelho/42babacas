@@ -72,7 +72,7 @@ class KibeService {
   // we check in our database if we already posted this status
   private function WasAlreadyPosted($status) {
     $this->Log("checking if tweet {".$status->id."} was already posted...");
-    $existing = TweetsControl::GetByTweetId($status->id);
+    $existing = TweetsControl::GetByOriginalId($status->id);
     if ($existing->id) {
       $this->Log("tweet with text {".$status->text."} already exists with id {".$existing->id."}");
       return true;
