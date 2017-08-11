@@ -65,7 +65,8 @@ class KibeService {
       array_splice($this->tweets, $key, 1);
       return $this->PickupTweetToPost();
     } else {
-      return $this->Post($tweet);
+      $delay = rand(0, 1800);
+      return $this->Post($tweet, $delay);
     }
   }
 
