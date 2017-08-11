@@ -4,13 +4,17 @@ include(__DIR__."/Base/TweetBase.php");
 
 class Tweet extends TweetBase {
   public function Build($status) {
-    $this->text = $status->text;
+    $this->text = $this->NormalizeTweet($status->text);
     $this->original_id = $status->id;
     $this->rate = $status->rate;
     $this->user_id = $status->user;
     $this->user_name = $status->arroba;
     $this->translate_from = $status->translated;
     return $this;
+  }
+
+  public function NormalizeTweet($tweet) {
+    return ChapolinSinceroService::NormalizeTweet($tweet);
   }
 
   public function Log($log) {

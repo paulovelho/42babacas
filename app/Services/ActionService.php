@@ -40,7 +40,7 @@ class ActionService {
   }
 
   public function EmptyTime() {
-    if($this->ChanceOf(20)) {
+    if($this->ChanceOf(30)) {
       return "history";
     } else {
       return "unfollow";
@@ -49,7 +49,7 @@ class ActionService {
 
   public function Morning() {
     if ($this->ChanceOf(40)) {
-      if ($this->ChanceOf(20)) {
+      if ($this->ChanceOf(40)) {
         return "unfollow";
       } else {
         return "farm";
@@ -65,7 +65,7 @@ class ActionService {
 
   public function Day() {
     if ($this->ChanceOf(20)) {
-      if ($this->ChanceOf(20)) {
+      if ($this->ChanceOf(60)) {
         return "unfollow";
       } else {
         return "farm";

@@ -4,6 +4,7 @@ require("inc/global.php");
 include($magrathea_path."/MagratheaServer.php");
 
 include("Services/ActionService.php");
+include("Services/ChapolinSinceroService.php");
 include("Services/FarmService.php");
 include("Services/KibeService.php");
 include("Services/LoggerService.php");
@@ -122,7 +123,9 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
-    LoggerService::Instance()->Log("test");
+    $tweet = "SERÁ QUE ITAU PERSONALITÈ É REALMENTE PERSONALIZADO POR EXEMPLO EU POSSO MUDAR O CABELO DO GERENTE?";
+    $final = ChapolinSinceroService::UncapitalizeIt($tweet);
+    LoggerService::Instance()->Log($final);
   }
 
 }
