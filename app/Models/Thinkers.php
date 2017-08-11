@@ -30,6 +30,7 @@ class ThinkersControl extends ThinkersControlBase {
 //    return ["paulovelho"]; # for testing on environments without MySQL
     $query = MagratheaQuery::Select("name")
       ->Table("thinkers")
+      ->Where( array('active' => true) )
       ->Order("RAND ()")
       ->Limit($quantity);
     $arr = MagratheaDatabase::Instance()

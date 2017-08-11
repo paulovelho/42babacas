@@ -89,14 +89,14 @@ class KibeService {
     $tweet = new Tweet();
     $tweet->Build($status);
     if( $this->simulate ) {
-      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."}, originally posted on {".$status->TweetDate()."} ".
+      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."} from @".$tweet->user_name.", originally posted on {".$status->TweetDate()."} ".
         ($delay > 0 ? "with delay of ".$delay : ""));
       return true;
     }
     sleep($delay);
     $postedStatus = $this->twitter->PostTweet($tweet->text);
     if ($postedStatus && $postedStatus->id) {
-      $this->Log("posted tweet {".$tweet->text."} with id ".$postedStatus->id);
+      $this->Log("posted tweet {".$tweet->text."} from @".$tweet->user_name." with id ".$postedStatus->id);
       return $tweet->Log($status->log)->Post($postedStatus->id);
     } else {
       $this->Log("failed posting tweet {".$tweet->text."}");
