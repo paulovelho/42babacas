@@ -24,6 +24,14 @@ class Status {
     $this->IsRetweet($data->retweeted_status);
   }
 
+  function __toString() {
+    $string = "";
+    $string .= "TWEET {".$this->text."} ~ ".$this->TweetDate()." \n";
+    $string .= "author: @".$this->arroba." | ".$this->author_followers." followers \n";
+    $string .= "Rate: ".$this->rate." (".$this->retweets." retweets | ".$this->likes." likes)\n";
+    return $string;
+  }
+
   private function fillUp($data) {
     $this->id = $data->id;
     $this->createdAt = strtotime($data->created_at);
@@ -116,8 +124,6 @@ class Status {
     $this->log .= "{".$log."}";
     if ($newLine) $this->log .= "\n";
   }
-
-
 
 }
 
