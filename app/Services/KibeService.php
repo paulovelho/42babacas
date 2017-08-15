@@ -110,6 +110,7 @@ class KibeService {
       return false;
     }
     $this->Log("got ".count($this->tweets)." tweets with maximum rate of ".$this->tweets[0]->rate." and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
+    $this->PrintTweets();
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
       return true;
@@ -138,6 +139,7 @@ class KibeService {
         " from [".$dead_thinker."]".
         " with maximum rate of ".$this->tweets[0]->rate.
         " and minimum of ".$this->tweets[count($this->tweets)-1]->rate);
+    $this->PrintTweets();
     if ($this->PickupTweetToPost()) {
       $this->Log("transaction ended: successfully posted");
       return true;
