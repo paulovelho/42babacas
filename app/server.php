@@ -65,6 +65,9 @@ class TwitterServer extends MagratheaServer{
 
   private function RunAction($action) {
     switch ($action) {
+      case 'help':
+        $this->help();
+        break;
       case 'kibe':
         $this->Kibar();
         break;
@@ -87,6 +90,21 @@ class TwitterServer extends MagratheaServer{
         echo "action invalid: {".$action."}";
         break;
     }
+  }
+
+  private function help() {
+    echo "\n\t==*== 42 BABACAS ==*==\n";
+    echo "\n\tRobot that tries to be funny in twitter stealing jokes...\n\n";
+
+    echo "\tcommands:\n";
+    echo "\t[kibe]=> post a random tweet\n";
+    echo "\t[history]=> post a random tweet from the past\n";
+    echo "\t[farm]=> follows a random profile\n";
+    echo "\t[undollow]=> unfollow someone we follow\n";
+    echo "\t[test]=> every now and then a new test happens\n";
+    echo "\t[none]=> what? why?\n";
+    echo "\n\n";
+    return false;
   }
 
   private function FarmFollower() {
