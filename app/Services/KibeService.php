@@ -9,9 +9,9 @@ class KibeService {
   private $log = array();
 
   private $dead_thinkers = [
-    "_pavan_", "bomdiaporque", 
-    "microcontoscos", "bomsenhor", 
-    "joaoluisjr", "paulovelho", "brunafeia"];
+    "_pavan_", "bomdiaporque", "microcontoscos",
+    "bomsenhor", "joaoluisjr", "paulovelho", 
+    "brunafeia", "SeuQualquer", "thiagomava"];
   // singleton:
   protected static $inst = null;
 
@@ -49,7 +49,7 @@ class KibeService {
     $tweet = new Tweet();
     $tweet->Build($status);
     if( $this->simulate ) {
-      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."} from @".$tweet->user_name.", originally posted on {".$status->TweetDate()."} ".
+      $this->Log("SIMULATING ONLY: posting tweet {".$tweet->text."} (rate: ".$status->rate.") from @".$tweet->user_name.", originally posted on {".$status->TweetDate()."} ".
         ($delay > 0 ? "with delay of ".$delay : ""));
       return true;
     }
@@ -73,6 +73,10 @@ class KibeService {
       return $this->PickupTweetToPost();
     } else {
       $delay = rand(0, 1800);
+      if( $tweet->rate < 20 ) {
+        $this->Log("low rate tweet: {".$tweet->text."}");
+        return false;
+      }
       return $this->Post($tweet, $delay);
     }
   }
@@ -92,11 +96,11 @@ class KibeService {
   public function GetInspiration($thinkers) {
     foreach ($thinkers as $arroba) {
       $this->Log("looking for inspiration on @".$arroba."'s twitter...");
-      $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba, 10));
+      $this->tweets = array_merge($this->tweets, $this->GetTweetsFrom($arroba));
     }
   }
   public function GetTweetsFrom($arroba) {
-    return $this->twitter->GetTweetsFrom($arroba, 3);
+    return $this->twitter->GetTweetsFrom($arroba, 10);
   }
 
   /* KIBAR */ 
