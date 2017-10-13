@@ -71,7 +71,7 @@ class FarmService {
   public function Follow($user_id) {
     $this->Log("following ".$user_id);
     $userToFollow = FollowFarmControl::GetByTwitterId($user_id);
-    if( !empty($userToFollow->id); ){
+    if( !empty($userToFollow->id) ){
       $this->Log("we already follow this profile");
       $this->RemoveFarmUser($userToFollow);
       return $this->Finish();
