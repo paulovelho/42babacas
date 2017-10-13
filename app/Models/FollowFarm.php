@@ -12,6 +12,7 @@ class FollowFarmControl extends FollowFarmControlBase {
       ->Obj( new FollowFarm() )
       ->Where( array('user_id' => $id) );
     $follow = self::RunRow($query->SQL());
+    return $follow;
   }
 
   public static function UserExists($id) {
