@@ -70,8 +70,10 @@ class FarmService {
 
   public function Follow($user_id) {
     $this->Log("following ".$user_id);
-    if( FollowFarmControl::UserExists($user_id) ){
-      $this->Log("we already follow this guy");
+    $userToFollow = FollowFarmControl::GetByTwitterId($user_id);
+    if( !empty($userToFollow->id); ){
+      $this->Log("we already follow this profile");
+      $this->RemoveFarmUser($userToFollow);
       return $this->Finish();
     }
     $follow = new FollowFarm();
@@ -82,6 +84,19 @@ class FarmService {
     $this->Log("followed ".$twFollow->screen_name);
     $this->EndCycle();
     return $follow->Save();
+  }
+
+  public function RemoveFarmUser($user) {
+    if( !empty($user->unfollowed_on) ) {
+      $this->Log("we already unfollow this profile as well (unfollowed on ".$user->unfollowed_on.")");
+      $unfollowDate = new DateTime($user->unfollowed_on);
+      $now = now();
+      if($unfollowDate->diff($now)->days > 30) {
+        $this->Log("deleting him...");
+        return $user->Delete();
+      }
+    }
+    return false;
   }
 
   /* LOG */

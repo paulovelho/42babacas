@@ -11,7 +11,7 @@ class KibeService {
   private $dead_thinkers = [
     "_pavan_", "bomdiaporque", "microcontoscos",
     "bomsenhor", "joaoluisjr", "paulovelho", 
-    "brunafeia", "SeuQualquer", "thiagomava"];
+    "brunafeia", "SeuQualquer", "thiagomava", "vidadeadultos"];
   // singleton:
   protected static $inst = null;
 

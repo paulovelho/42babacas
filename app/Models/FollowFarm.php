@@ -7,11 +7,15 @@ class FollowFarm extends FollowFarmBase {
 }
 
 class FollowFarmControl extends FollowFarmControlBase {
-  public static function UserExists($id) {
+  public static function GetByTwitterId($id) {
     $query = MagratheaQuery::Select()
       ->Obj( new FollowFarm() )
       ->Where( array('user_id' => $id) );
     $follow = self::RunRow($query->SQL());
+  }
+
+  public static function UserExists($id) {
+    $follow = $this->GetByTwitterId($id);
     return !empty($follow->id);
   }
 
