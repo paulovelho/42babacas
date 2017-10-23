@@ -59,7 +59,7 @@ class ActionService {
         return "farm";
       }
     } else {
-      if ($this->ChanceOf(20)) {
+      if ($this->ChanceOf(40)) {
         return "history";
       } else {
         return "kibe";
@@ -75,7 +75,7 @@ class ActionService {
         return "farm";
       }
     } else {
-      if ($this->ChanceOf(20)) {
+      if ($this->ChanceOf(30)) {
         return "history";
       } else {
         return "kibe";

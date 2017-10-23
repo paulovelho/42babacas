@@ -7,6 +7,7 @@ include("Services/ActionService.php");
 include("Services/ChapolinSinceroService.php");
 include("Services/FarmService.php");
 include("Services/KibeService.php");
+include("Services/HistoricalKibeService.php");
 include("Services/LoggerService.php");
 include("Services/RateService.php");
 include("Services/TwitterService.php");
@@ -126,18 +127,21 @@ class TwitterServer extends MagratheaServer{
     KibeService::Otariano()->SaveLog();
   }
   private function HistoricalKibe() {
-    $tweets = KibeService::Otariano()->GetTweets();
+    $tweets = HistoricalKibeService::Otariano()->GetTweets();
     if ( count($tweets) == 0 ) {
       $this->Kibar();
     }
-    KibeService::Otariano()->ClearLog();
-    KibeService::Otariano()->HistoricalKibe(); 
-    KibeService::Otariano()->SaveLog();
+    HistoricalKibeService::Otariano()->ClearLog();
+    HistoricalKibeService::Otariano()->HistoricalKibe(); 
+    HistoricalKibeService::Otariano()->SaveLog();
   }
 
   public function SimulateKibe() {
+    return $this->SimulateHistoricalKibe();
     KibeService::Otariano()->Simulate()->Kibar();
-    KibeService::Otariano()->Simulate()->HistoricalKibe(); 
+  }
+  public function SimulateHistoricalKibe() {
+    HistoricalKibeService::Otariano()->Simulate()->Kibar();
   }
 
   public function Test() {
