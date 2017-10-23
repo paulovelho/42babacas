@@ -127,10 +127,6 @@ class TwitterServer extends MagratheaServer{
     KibeService::Otariano()->SaveLog();
   }
   private function HistoricalKibe() {
-    $tweets = HistoricalKibeService::Otariano()->GetTweets();
-    if ( count($tweets) == 0 ) {
-      $this->Kibar();
-    }
     HistoricalKibeService::Otariano()->ClearLog();
     HistoricalKibeService::Otariano()->HistoricalKibe(); 
     HistoricalKibeService::Otariano()->SaveLog();
