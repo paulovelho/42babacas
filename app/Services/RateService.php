@@ -42,8 +42,7 @@ class RateService {
    *    - hashtags should lower the rating (they are boring)
    *    - foreign tweets higher the rating (they might seem more original)
    */
-  public function Rate($historical) {
-    if($historical) return $this->HistoryRate();
+  public function Rate() {
     $this->Log("rating [".$this->status->text."] from @".$this->status->arroba." {entities: ".$this->status->has_entities.", reply_to: ".$this->status->reply_to."} ");
 
     if(!$this->IsRateable()) return 0;

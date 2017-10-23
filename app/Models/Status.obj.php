@@ -46,11 +46,16 @@ class Status {
     $this->GetEntities($data->entities);
   }
 
-  public function Rate($time_rate=true) {
-    $this->rate = RateService::Instance()
-      ->Load($this)
-      ->IncludeTime($time_rate)
-      ->Rate();
+  public function Rate($history) {
+    if ($history) {
+      $this->rate = RateService::Instance()
+        ->Load($this)
+        ->HistoryRate();
+    } else {
+      $this->rate = RateService::Instance()
+        ->Load($this)
+        ->Rate();
+    }
     $this->Log(RateService::Instance()->GetLog());
     return $this->rate;
   }
