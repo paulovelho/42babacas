@@ -10,3 +10,4 @@ twitter
 gato
 gente
 povo
+rico

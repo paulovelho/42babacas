@@ -128,7 +128,7 @@ class TwitterServer extends MagratheaServer{
   }
   private function HistoricalKibe() {
     HistoricalKibeService::Otariano()->ClearLog();
-    HistoricalKibeService::Otariano()->HistoricalKibe(); 
+    HistoricalKibeService::Otariano()->Kibar(); 
     HistoricalKibeService::Otariano()->SaveLog();
   }
 

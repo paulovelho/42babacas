@@ -3,7 +3,7 @@
 class RateService {
   // singleton:
   protected static $inst = null;
-  private $rate_time = true;
+  protected $historical = true;
   private $rate;
   private $status;
   public $log = "";
@@ -28,10 +28,6 @@ class RateService {
     $this->status = $status;
     return $this;
   }
-  public function IncludeTime($t) {
-    $this->rate_time = $t;
-    return $this;
-  }
 
   /* 
    * this is a fucking complex rate system...
@@ -46,16 +42,22 @@ class RateService {
    *    - hashtags should lower the rating (they are boring)
    *    - foreign tweets higher the rating (they might seem more original)
    */
-  public function Rate() {
+  public function Rate($historical) {
+    if($historical) return $this->HistoryRate();
     $this->Log("rating [".$this->status->text."] from @".$this->status->arroba." {entities: ".$this->status->has_entities.", reply_to: ".$this->status->reply_to."} ");
 
     if(!$this->IsRateable()) return 0;
     $this->EntitiesRate();
     $this->LikabilityRate();
     $this->AuthorRate();
-    if ($time_rate) $this->TimeRate();
     $this->NormalizeRate();
     $this->Log("final rate: ".$this->rate);
+    return $this->rate;
+  }
+  public function HistoryRate() {
+    $this->Rate();
+    $this->EntitiesRate(); // entities will be counted twice
+    $this->TimeRate();
     return $this->rate;
   }
 
