@@ -46,17 +46,21 @@ class RateService {
     $this->Log("rating [".$this->status->text."] from @".$this->status->arroba." {entities: ".$this->status->has_entities.", reply_to: ".$this->status->reply_to."} ");
 
     if(!$this->IsRateable()) return 0;
-    $this->EntitiesRate();
-    $this->LikabilityRate();
-    $this->AuthorRate();
-    $this->NormalizeRate();
-    $this->Log("final rate: ".$this->rate);
+    $this->HashtagsRate()
+      ->LikabilityRate()
+      ->AuthorRate()
+      ->NormalizeRate()
+      ->Log("final rate: ".$this->rate);
     return $this->rate;
   }
   public function HistoryRate() {
-    $this->Rate();
-    $this->EntitiesRate(); // entities will be counted twice
-    $this->TimeRate();
+    if( $this->Rate() == 0 ) return 0;
+    // entities will be counted twice
+    $this->HashtagsRate()
+      ->TimeRate()
+      ->NormalizeRate()
+      ->LikabilityPenality()
+      ->Log("final rate: ".$this->rate);
     return $this->rate;
   }
 
@@ -101,7 +105,14 @@ class RateService {
     $log .= "[rate: ".$rate.";]";
     $this->Log($log);
     $this->rate = $rate;
-    return $rate;
+    return $this;
+  }
+  public function LikabilityPenality() {
+    // removes rate if no likes and no rts
+    if ( $this->status->likes == 0 && $this->status->retweets == 0 ) {
+      $this->rate = $this->rate - 50;
+    }
+    return $this;
   }
   public function AuthorRate() {
     $log = "\n--- authors rate: ";
@@ -114,10 +125,10 @@ class RateService {
     $log .= "[rate: ".$rate.";]";
     $this->Log($log);
     $this->rate = $rate;
-    return $rate;
+    return $this;
   }
-  public function EntitiesRate() {
-    $log = "\n--- entities rate: ";
+  public function HashtagsRate() {
+    $log = "\n--- hashtags rate: ";
     $rate = $this->rate;
     // hashtags should lower the rate as well (-20 points per hashtag):
     $rate = $rate - (count($this->status->entities["hashtags"]) * 20);
@@ -126,7 +137,7 @@ class RateService {
     $log .= "[rate: ".$rate.";]";
     $this->Log($log);
     $this->rate = $rate;
-    return $rate;
+    return $this;
   }
   public function TimeRate() {
     $log = "\n--- time rate: ";
@@ -137,10 +148,10 @@ class RateService {
     $six_months = 15770000;
     $log .= "time difference: ".$timeDifference.", (".floor($timeDifference/86400)." days ago); ";
     // don't change for the last 6 months
-    if ($timeDifference < $six_months) return $rate;
+    if ($timeDifference < $six_months) return $this;
 
     // if have hashtags, it doesn't get time rates
-    if (count($this->status->entities["hashtags"]) > 0) return $rate; 
+    if (count($this->status->entities["hashtags"]) > 0) return $this; 
 
     $time_rate = ($timeDifference - $six_months) / 1000000;
     if($time_rate > 75) $time_rate = 75;
@@ -148,7 +159,7 @@ class RateService {
     $log .= "[rate: ".$rate.";]";
     $this->Log($log);
     $this->rate = $rate;
-    return $rate;
+    return $this;
   }
 
   public function NormalizeRate() {
@@ -156,7 +167,7 @@ class RateService {
     if( $this->rate < 0 ) $this->rate = 0;
     $log .= "[rate: ".$this->rate.";]";
     $this->Log($log);
-    return $this->rate;
+    return $this;
   }
 
   public function GetLog() {

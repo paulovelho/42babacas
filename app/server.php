@@ -65,6 +65,7 @@ class TwitterServer extends MagratheaServer{
   }
 
   private function RunAction($action) {
+    echo "==== running [".$action."]";
     switch ($action) {
       case 'help':
         $this->help();
