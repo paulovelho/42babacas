@@ -2,7 +2,6 @@ amor
 adulto
 vida
 cachorro
-banco
 São Paulo
 Brasil
 computador
