@@ -90,7 +90,7 @@ class FarmService {
     if( !empty($user->unfollowed_on) ) {
       $this->Log("we already unfollow this profile as well (unfollowed on ".$user->unfollowed_on.")");
       $unfollowDate = new DateTime($user->unfollowed_on);
-      $now = now();
+      $now = new DateTime();
       if($unfollowDate->diff($now)->days > 30) {
         $this->Log("deleting him...");
         return $user->Delete();
