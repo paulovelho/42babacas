@@ -58,6 +58,7 @@ class RateService {
     // entities will be counted twice
     $this->HashtagsRate()
       ->TimeRate()
+      ->ThemeRate()
       ->NormalizeRate()
       ->LikabilityPenality()
       ->Log("final rate: ".$this->rate);
@@ -110,6 +111,13 @@ class RateService {
   public function LikabilityPenality() {
     // removes rate if no likes and no rts
     if ( $this->status->likes == 0 && $this->status->retweets == 0 ) {
+      $this->rate = $this->rate - 50;
+    }
+    return $this;
+  }
+  public function ThemeRate() {
+    $theme = ThemeService::Instance()->getTheme($this->status->text);
+    if ($theme !== false) {
       $this->rate = $this->rate - 50;
     }
     return $this;
