@@ -10,6 +10,7 @@ include("Services/KibeService.php");
 include("Services/HistoricalKibeService.php");
 include("Services/LoggerService.php");
 include("Services/RateService.php");
+include("Services/ThemeService.php");
 include("Services/TwitterService.php");
 
 MagratheaModel::IncludeAllModels();
@@ -35,6 +36,14 @@ class TwitterServer extends MagratheaServer{
 
   public function ValidateAuth(){
     $key = $this->GetAuth();
+    if ($key == "help") {
+      $this->help();
+      die;
+    }
+    if ($key == "test") {
+      $this->Test();
+      die("---\n---\nTEST ENDED");
+    }
     if ($key == "simulate") {
       $this->SimulateKibe();
       die("---\n---\nSIMULATION ENDED");
@@ -142,9 +151,7 @@ class TwitterServer extends MagratheaServer{
   }
 
   public function Test() {
-    $tweet = "SERÁ QUE ITAU PERSONALITÈ É REALMENTE PERSONALIZADO POR EXEMPLO EU POSSO MUDAR O CABELO DO GERENTE?";
-    $final = ChapolinSinceroService::UncapitalizeIt($tweet);
-    LoggerService::Instance()->Log($final);
+    echo "TESTING ...\n";
   }
 
 }

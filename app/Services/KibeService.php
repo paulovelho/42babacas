@@ -8,9 +8,8 @@ class KibeService {
   protected $historical = false;
   protected $log = array();
 
-  private static $inst = null;
-
   // Singleton instance:
+  private static $inst = null;
   public static function Otariano(){
     if(!isset(self::$inst)){
       self::$inst = new KibeService();
