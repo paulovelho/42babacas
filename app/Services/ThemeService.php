@@ -3,8 +3,9 @@
 class ThemeService {
 
   private $themes = array(
-    "futebol" => array("gol", "flamengo", "corinthian", "arbitro"),
-    "BBB" => array("bbb", "paredao", "eliminado")
+    "futebol" => array("gol", "flamengo", "corinthian", "arbitro", "campeonato brasileiro", "série A", "seleção"),
+    "BBB" => array("bbb", "paredao", "eliminado"),
+    "politica" => array("dilma", "lula", "aecio", "haddad", "kassab", "japones da federal")
   );
   private $theme = false;
 
